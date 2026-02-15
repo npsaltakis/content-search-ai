@@ -670,7 +670,7 @@ with tabs[3]:
                         else:
                             explain_text = "🔴 Low confidence – weak semantic overlap"
 
-                    caption = f"Similarity: {score * 100:.2f}%"
+                    caption = f"Cosine Similarity: {score:.4f}"
                     if confidence is not None:
                         caption += f"\nConfidence: {confidence * 100:.1f}%"
                         caption += f"\n{explain_text}"
@@ -721,7 +721,24 @@ with tabs[4]:
             if not results:
                 st.warning("❌ No similar images found.")
             else:
-                st.success(f"✅ Found {len(results)} similar images in {elapsed:.2f}s")
+                # --------------------------------------
+                # ADAPTIVE THRESHOLD (NO CORE CHANGE)
+                # --------------------------------------
+                max_score = results[0]["score"]
+                margin = 0.35  # safe margin for image-to-image
+                threshold = max_score - margin
+
+                valid_results = [r for r in results if r["score"] >= threshold]
+
+                if not valid_results:
+                    st.warning("⚠️ No strongly similar images found.")
+                else:
+                    st.success(
+                        f"✅ Found {len(valid_results)} strongly similar images "
+                        f"(filtered from {len(results)}) in {elapsed:.2f}s"
+                    )
+
+                results = valid_results
 
                 # ======================================================
                 # 🔎 TRUE INDEX SIZE FROM SQLITE
@@ -779,7 +796,7 @@ with tabs[4]:
                     score = r["score"]
                     confidence = r.get("confidence", None)
 
-                    caption = f"Similarity: {score * 100:.2f}%"
+                    caption = f"Cosine Similarity: {score:.4f}"
                     if confidence is not None:
                         caption += f"\nConfidence: {confidence * 100:.1f}%"
 
