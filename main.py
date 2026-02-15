@@ -61,11 +61,20 @@ if __name__ == "__main__":
         print(f"✅ {p.name} started (PID {p.pid})")
 
     print("\n🚀 Starting Streamlit UI...")
+
     streamlit_process = subprocess.Popen(
-        ["streamlit", "run", "app.py"],
+        [
+            "/opt/miniconda3/envs/content-search-ai/bin/streamlit",
+            "run",
+            "app.py",
+            "--server.port", "8501",
+            "--server.address", "127.0.0.1",
+            "--server.headless", "true",
+        ],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
+
     print(f"✅ Streamlit started (PID {streamlit_process.pid})")
 
     print("\n👀 System running. Press Ctrl+C to stop.\n")
