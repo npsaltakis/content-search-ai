@@ -1,4 +1,5 @@
 name: content-search-ai
+
 channels:
   - pytorch
   - conda-forge
@@ -18,7 +19,7 @@ dependencies:
   - watchdog
   - sqlite
 
-  # PyTorch CPU only
+  # PyTorch CPU stack (binary matched)
   - pytorch=2.4.1
   - torchvision=0.19.1
   - torchaudio=2.4.1
@@ -47,4 +48,3 @@ dependencies:
       - opencv-python
       - pygame
       - streamlit>=1.38.0
-      - git+https://github.com/openai/CLIP.git@dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1
