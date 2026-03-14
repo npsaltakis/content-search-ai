@@ -206,21 +206,19 @@ Key libraries used in the project:
 
 ---
 
-## Architecture Documentation
+## Documentation Guide
 
-For a more detailed explanation of the system design, startup flow, indexing pipeline, database structure, retrieval logic, and explainability layer, see:
+Key project documentation:
 
-- `docs/ARCHITECTURE.md`
-
----
-
-## Evaluation Documentation
-
-For the current retrieval evaluation and threshold-validation plan, see:
-
-- `docs/EVALUATION_PLAN.md`
-- `docs/EVALUATION_RESULTS.md`
-- `evaluation/README.md`
+- `docs/ARCHITECTURE.md`: system design, indexing flow, retrieval flow, and explainability
+- `docs/RUNBOOK.md`: setup, startup, demo checklist, and troubleshooting
+- `docs/EVALUATION_PLAN.md`: threshold-validation methodology and evaluation design
+- `docs/EVALUATION_RESULTS.md`: first completed PDF threshold-validation results
+- `evaluation/README.md`: practical evaluation workspace guide
+- `evaluation/EVALUATION_STATUS.md`: modality-by-modality evaluation status
+- `docs/DEFENSE_PREP_EL.md`: practical Greek-language defense preparation notes
+- `docs/THESIS_QA_EL.md`: likely thesis questions and answers in Greek
+- `docs/THEORY_MODELS_QA_EL.md`: theory-focused model questions in Greek
 
 ---
 
