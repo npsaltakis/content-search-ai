@@ -203,3 +203,85 @@ The project now has first-pass threshold validation evidence for:
 - **Text -> Image**
 
 This strengthens the thesis by showing that the current adaptive threshold has now been checked on more than one modality, even though broader multimodal evaluation is still future work.
+
+
+---
+
+## Third Pass: Image -> Image Threshold Validation
+
+A third first-pass threshold-sensitivity evaluation was executed on the **Image -> Image** retrieval pipeline.
+
+Reason for choosing this modality next:
+- the indexed archive already contains several visually distinctive images
+- image-to-image retrieval is one of the main supported search modes of the application
+- a small manual pass can be performed without changing UI behavior or retrieval logic
+
+Supporting files for this pass:
+- `evaluation/image_to_image_threshold_summary.csv`
+- `evaluation/image_to_image_threshold_top5.csv`
+- `evaluation/image_to_image_eval_sheets/`
+- `evaluation/image_to_image_queries/`
+
+### Query Set Used
+
+The image-to-image pass used 5 representative query images copied outside the indexed archive:
+- `Lionel_Messi.jpg`
+- `407869068_10161463377388069_270481176185833064_n2.jpg`
+- `89332423.jpg`
+- `89404014.jpg`
+- `89407459.jpg`
+
+This was done so that the query image itself was not passed to the system as a database item path, while still preserving the visual content of a realistic query image.
+
+### Relevance Proxy Used
+
+This pass used a small manual visual relevance proxy:
+- for each query image, one or more clearly relevant archive images were identified in advance
+- these included exact matches, near-duplicates, or very close visual variants when such examples existed in the archive
+- top-5 outputs were then checked against this proxy and inspected visually through contact sheets
+
+Important limitation:
+- image-to-image relevance is inherently more qualitative than PDF topic matching
+- some visual similarity matches are acceptable even when they do not belong to the predefined target set
+
+### Summary Results
+
+| Alpha | Threshold formula | Avg returned images per query | Relevant hits in top-5 | Queries with at least 1 relevant top-5 result |
+|---|---|---:|---:|---:|
+| 0.0 | `mean` | 73.8 | 8 | 5 |
+| 0.2 | `mean + 0.2 * std` | 56.6 | 8 | 5 |
+| 0.3 | `mean + 0.3 * std` | 49.6 | 8 | 5 |
+| 0.5 | `mean + 0.5 * std` | 37.0 | 8 | 5 |
+
+### Main Findings
+
+1. As in the previous modalities, stricter thresholds substantially reduced the accepted result-set size.
+2. In this sampled Image -> Image experiment, the tested threshold variants did not change the observed top-5 relevance proxy.
+3. The current default `mean + 0.3 * std` again behaved as a reasonable middle ground by reducing the result-set size while preserving the same proxy top-5 behavior.
+4. Visual inspection showed that exact duplicate or near-duplicate queries behaved strongly, while broader scene-level similarity still allowed some semantically plausible but proxy-external matches.
+
+### Interpretation
+
+For this first Image -> Image pass, `mean + 0.3 * std` remains a defensible practical default because it:
+- reduces the number of returned images compared with looser variants
+- preserves the same observed proxy top-5 behavior in the sampled queries
+- avoids moving to a stricter threshold without evidence of better top-5 retrieval quality
+
+The image-to-image pass also reinforces an important pattern seen in the previous evaluations:
+- threshold tuning is useful for filtering, but it is not enough on its own to eliminate all ambiguity in visual similarity retrieval
+
+### Honest Limitations of This Image -> Image Pass
+
+- only 5 manually selected query images were used
+- the relevance proxy was intentionally small and conservative
+- some top results that looked visually reasonable were still counted as proxy-external because they were not part of the predefined target set
+- the pass validates threshold behavior more than full semantic optimality of image similarity retrieval
+
+### Practical Conclusion
+
+The project now has first-pass threshold validation evidence for:
+- **Text -> PDF**
+- **Text -> Image**
+- **Image -> Image**
+
+This gives the thesis a more complete multimodal evaluation story and further supports the use of the current adaptive threshold as a practical default.
