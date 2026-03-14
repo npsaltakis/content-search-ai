@@ -129,6 +129,11 @@ Safe future directions:
 - Several retrieval modules use heuristic adaptive thresholds such as `mean + 0.3 * std`.
 - This is practical, but should ideally be supported by experiments and evaluation.
 
+Status:
+- Planning completed
+- A dedicated evaluation plan was added in `docs/EVALUATION_PLAN.md`
+- The next safe step is to build a small representative query set and record manual relevance judgments before changing threshold logic
+
 ### 3.2 Add evaluation metrics
 - The thesis would be much stronger with measurable retrieval evaluation.
 - Possible metrics:

@@ -214,6 +214,14 @@ For a more detailed explanation of the system design, startup flow, indexing pip
 
 ---
 
+## Evaluation Documentation
+
+For the current retrieval evaluation and threshold-validation plan, see:
+
+- `docs/EVALUATION_PLAN.md`
+
+---
+
 ## Running the Application
 
 ```bash
