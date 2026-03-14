@@ -1,0 +1,21 @@
+query_id,modality,query_type,query_text,query_asset,notes
+img_t_001,image,text,person,,Replace with a query confirmed to exist in the image archive
+img_t_002,image,text,car,,Replace with a query confirmed to exist in the image archive
+img_t_003,image,text,building,,Replace with a query confirmed to exist in the image archive
+img_t_004,image,text,dog,,Replace with a query confirmed to exist in the image archive
+img_t_005,image,text,nature,,Replace with a query confirmed to exist in the image archive
+img_i_001,image,image,,data/query_images/example_image_1.jpg,Provide a local query image for image-to-image evaluation
+img_i_002,image,image,,data/query_images/example_image_2.jpg,Provide a local query image for image-to-image evaluation
+pdf_t_001,pdf,text,introduction to artificial intelligence,,Expected to match introductory AI lecture notes if present
+pdf_t_002,pdf,text,decision trees,,Expected to match decision tree material if present
+pdf_t_003,pdf,text,genetic algorithms,,Expected to match genetic algorithm material if present
+pdf_t_004,pdf,text,neural networks,,Expected to match ANN material if present
+pdf_t_005,pdf,text,logistic regression,,Expected to match regression material if present
+pdf_p_001,pdf,pdf,,data/query/example_pdf_1.pdf,Provide a local query PDF for pdf-to-pdf evaluation
+pdf_p_002,pdf,pdf,,data/query/example_pdf_2.pdf,Provide a local query PDF for pdf-to-pdf evaluation
+aud_t_001,audio,text,happy speech,,Use only if indexed audio/transcript content supports it
+aud_t_002,audio,text,sad speech,,Use only if indexed audio/transcript content supports it
+aud_t_003,audio,text,neutral speech,,Use only if indexed audio/transcript content supports it
+aud_e_001,audio,emotion,happy,,Emotion-only query
+aud_e_002,audio,emotion,sad,,Emotion-only query
+aud_e_003,audio,emotion,neutral,,Emotion-only query

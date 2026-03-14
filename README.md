@@ -219,6 +219,7 @@ For a more detailed explanation of the system design, startup flow, indexing pip
 For the current retrieval evaluation and threshold-validation plan, see:
 
 - `docs/EVALUATION_PLAN.md`
+- `evaluation/README.md`
 
 ---
 
