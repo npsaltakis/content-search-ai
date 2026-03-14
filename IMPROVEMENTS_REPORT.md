@@ -107,6 +107,20 @@ Status:
 - This increases CPU/RAM usage and may reduce scalability.
 - Future optimization could reduce duplicated loading costs.
 
+Status:
+- Assessed, not aggressively optimized yet
+- Current duplication mainly comes from process isolation between:
+  - initial sync
+  - watchdog services
+  - runtime searchers
+- This is a real performance trade-off, but also a predictable consequence of the current process-based architecture
+- For the current thesis/demo scale, this is acceptable and safer than introducing a more complex shared model-serving architecture
+
+Safe future directions:
+- keep lazy loading inside each runtime context
+- avoid unnecessary re-instantiation within the same process
+- document the trade-off clearly rather than over-engineering cross-process model sharing too early
+
 ---
 
 ## 3. Search Quality and Research Improvements

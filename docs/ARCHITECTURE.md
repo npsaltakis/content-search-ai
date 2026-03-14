@@ -330,6 +330,11 @@ This refactor reduces the size of `app.py` and improves maintainability by separ
 - retrieval thresholds are heuristic rather than experimentally calibrated
 - SQLite works well for the current scale but is not optimized for large-scale vector search
 - watchdog services may duplicate heavy model loading across processes
+- some model duplication is an intentional trade-off of the current process-isolated design:
+  - initial sync loads its own indexing models
+  - watchdog services load their own long-lived model instances
+  - runtime UI searchers load their own search-time model instances
+- this increases memory usage, but keeps the architecture simpler and safer than introducing shared cross-process model serving at the current project scale
 - no full automated test suite yet
 
 ---
