@@ -212,11 +212,12 @@ Key project documentation:
 
 - `docs/ARCHITECTURE.md`: system design, indexing flow, retrieval flow, and explainability
 - `docs/RUNBOOK.md`: setup, startup, demo checklist, and troubleshooting
-- `docs/EVALUATION_PLAN.md`: threshold-validation methodology and evaluation design
-- `docs/EVALUATION_RESULTS.md`: first completed PDF threshold-validation results
+- `docs/EVALUATIONS_FULL_EL.md`: complete Greek-language evaluation analysis for thesis and oral defense
 - `evaluation/README.md`: practical evaluation workspace guide
 - `evaluation/EVALUATION_STATUS.md`: modality-by-modality evaluation status
 - `docs/DEFENSE_PREP_EL.md`: practical Greek-language defense preparation notes
+- `docs/THESIS_QA_EL.md`: likely thesis questions and answers in Greek
+- `docs/THEORY_MODELS_QA_EL.md`: theory-focused model questions in Greek
 - `docs/THESIS_QA_EL.md`: likely thesis questions and answers in Greek
 - `docs/THEORY_MODELS_QA_EL.md`: theory-focused model questions in Greek
 
