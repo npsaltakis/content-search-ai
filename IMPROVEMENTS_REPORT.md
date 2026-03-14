@@ -130,11 +130,13 @@ Safe future directions:
 - This is practical, but should ideally be supported by experiments and evaluation.
 
 Status:
-- Evaluation framework prepared
+- First-pass experimental validation completed
 - A dedicated evaluation plan was added in `docs/EVALUATION_PLAN.md`
 - A practical evaluation workspace was added under `evaluation/`
 - A lightweight metrics script was added to support manual judgment analysis
-- Experimental execution and final threshold comparison are still pending human relevance judgments
+- A first threshold-sensitivity experiment was completed for the Text -> PDF pipeline
+- Results were documented in `docs/EVALUATION_RESULTS.md`
+- Broader multimodal validation is still a future extension, but the current heuristic now has an initial documented experimental basis
 
 ### 3.2 Add evaluation metrics
 - The thesis would be much stronger with measurable retrieval evaluation.
