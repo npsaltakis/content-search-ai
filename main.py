@@ -2,6 +2,9 @@
 import sys
 import signal
 import subprocess
+import threading
+import time
+import webbrowser
 from multiprocessing import Process
 from core import Model
 
@@ -35,6 +38,14 @@ signal.signal(signal.SIGINT, shutdown)
 signal.signal(signal.SIGTERM, shutdown)
 
 
+def open_streamlit_tab(url: str, delay: float = 2.0):
+    def _open():
+        time.sleep(delay)
+        webbrowser.open(url)
+
+    threading.Thread(target=_open, daemon=True).start()
+
+
 # ============================
 # MAIN
 # ============================
@@ -62,10 +73,20 @@ if __name__ == "__main__":
 
     print("\n🚀 Starting Streamlit UI...")
     streamlit_process = subprocess.Popen(
-        ["streamlit", "run", "app.py"],
+        [
+            sys.executable,
+            "-m",
+            "streamlit",
+            "run",
+            "app.py",
+            "--server.port", "8501",
+            "--server.address", "127.0.0.1",
+            "--server.headless", "true",
+        ],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
+    open_streamlit_tab("http://127.0.0.1:8501")
     print(f"✅ Streamlit started (PID {streamlit_process.pid})")
 
     print("\n👀 System running. Press Ctrl+C to stop.\n")

@@ -1,156 +1,295 @@
-# 🎓 Content-Based Search in Multimedia Digital Archives using Artificial Intelligence (v1.8)
+# Content Search AI
 
-This repository is part of a university thesis project focused on **content-based multimodal search** in **digital multimedia archives** (Images, PDFs, Audio) using **Artificial Intelligence**.
+AI-powered multimodal search in digital multimedia archives.
 
-The system supports:
-- **Text → Image search**
-- **Image → Image similarity**
-- **Text → PDF semantic retrieval**
-- **PDF → PDF document similarity**
-- **Text / Emotion → Audio search**
-- **Real-time filesystem indexing**
-- **Unified SQLite database**
-- **Explainable retrieval results**
+This repository contains a university thesis project focused on content-based retrieval across:
+- images
+- PDF documents
+- audio files
 
-All functionalities are exposed through a **Streamlit web interface**.
+The system uses embeddings, transcript processing, emotion analysis, SQLite storage, and a Streamlit interface to support semantic search across multiple media types.
+
+Version: `v1.8`
 
 ---
 
-## 🧠 Core Design Principles
+## Overview
 
-- **Pure embedding-based retrieval**
-- **No hard rules / no keyword filters in the core**
-- **Explainability layer separated from retrieval**
-- **Stable retrieval core (not modified once validated)**
+The goal of the project is to support semantic retrieval in multimedia archives without relying only on filenames or simple keyword matching.
+
+The application indexes archive content, stores searchable representations in SQLite, and exposes retrieval through a web interface built with Streamlit.
+
+Supported capabilities:
+- Text -> Image search
+- Image -> Image similarity search
+- Text -> PDF semantic retrieval
+- PDF -> PDF similarity search
+- Text -> Audio semantic retrieval
+- Emotion -> Audio filtering
+- Real-time filesystem monitoring and indexing
+- Explainable retrieval results
 
 ---
 
-## 📁 Project Structure (Current – Clean & Stable)
+## Core Design Principles
 
-```
+- Embedding-based retrieval as the main search mechanism
+- Clear separation between retrieval and explainability
+- Unified local database for indexed content
+- Real-time archive synchronization through filesystem watchers
+- Practical multimodal pipeline suitable for thesis experimentation and demonstration
+
+---
+
+## How It Works
+
+### 1. Archive indexing
+The system monitors the archive folders under `data/` and processes incoming files:
+- images are converted into visual embeddings
+- PDFs are split into pages and encoded as text embeddings
+- audio files are transcribed, embedded, and classified by emotion
+
+### 2. Database storage
+The extracted representations are stored in a local SQLite database:
+- image metadata and embeddings
+- PDF page text and embeddings
+- audio embeddings and emotion metadata
+
+### 3. Retrieval
+At query time, the system compares the query representation with stored vectors and returns the most relevant results.
+
+### 4. Explainability
+The user interface displays supporting evidence such as:
+- similarity scores
+- confidence indicators
+- matched PDF paragraphs
+- detected audio emotion and emotion probabilities
+
+Important: explainability is intended to improve transparency and does not change the ranking logic.
+
+---
+
+## Search Modes
+
+### Image Retrieval
+- Text -> Image
+- Image -> Image
+- Uses CLIP image embeddings and M-CLIP text embeddings
+
+### PDF Retrieval
+- Text -> PDF pages
+- PDF -> PDF similarity
+- Uses page-level semantic embeddings
+- Returns page-level results with paragraph-based evidence
+
+### Audio Retrieval
+- Text -> Audio semantic retrieval
+- Emotion -> Audio filtering
+- Audio is first transcribed with Whisper
+- Search is performed over transcript embeddings
+- Emotion labels and probabilities are used for filtering and explainability
+
+Note: the audio pipeline is transcript-based retrieval with emotion analysis, not direct raw-audio embedding retrieval.
+
+---
+
+## Architecture Summary
+
+Main application flow:
+1. Start the application from `main.py`
+2. Download required model files if they are missing
+3. Run an initial synchronization of archive folders
+4. Start watchdog services for images, PDFs, and audio
+5. Launch the Streamlit interface from `app.py`
+
+Main components:
+- `main.py`: startup orchestration, sync, watchdog processes, Streamlit launch
+- `app.py`: Streamlit user interface
+- `core/image_search.py`: image retrieval logic
+- `core/pdf_search.py`: PDF semantic retrieval and document similarity
+- `core/audio_search.py`: audio search over transcript embeddings plus emotion metadata
+- `core/watchdog/`: real-time indexing services
+- `core/db/database_helper.py`: SQLite schema and data access layer
+
+---
+
+## Project Structure
+
+```text
 content-search-ai/
-├── data/
-│   ├── images/                 # Indexed image archive
-│   ├── pdfs/                   # Indexed PDF archive
-│   ├── audio/                  # Indexed audio archive (.wav)
-│   ├── transcripts/            # Audio transcripts (if present/used by your pipeline)
-│   ├── query/                  # Uploaded query PDFs (runtime)
-│   └── query_images/           # Uploaded query images (runtime)
-│
-├── core/
-│   ├── image_search.py         # CLIP / M-CLIP image retrieval
-│   ├── pdf_search.py           # PDF page-level semantic retrieval + PDF→PDF similarity
-│   ├── audio_search.py         # Audio search (transcript keywords + emotion)
-│   ├── emotion_model_v5.py     # Fine-tuned audio emotion classifier (v5)
-│   └── db/
-│       └── database_helper.py  # Unified SQLite handler
-│
-├── app.py                      # Streamlit UI
-├── main.py                     # App entry point
-├── content_search_ai.db        # ✅ SQLite database (images/pdfs/audio embeddings & metadata)
-├── environment.yml             # Conda environment
-├── requirements.txt            # pip environment
-└── README.md                   # This file
+|-- app.py
+|-- main.py
+|-- README.md
+|-- requirements.txt
+|-- environment.yml
+|-- content_search_ai.db
+|-- models/
+|-- assets/
+|-- core/
+|   |-- __init__.py
+|   |-- image_search.py
+|   |-- pdf_search.py
+|   |-- audio_search.py
+|   |-- emotion_model_v5.py
+|   |-- explainability.py
+|   |-- model.py
+|   |-- db/
+|   |   `-- database_helper.py
+|   `-- watchdog/
+|       |-- sync_manager.py
+|       |-- watch_images_other.py
+|       |-- watch_pdfs.py
+|       `-- watch_audio_other.py
+`-- data/
+    |-- images/
+    |-- pdfs/
+    |-- audio/
+    |-- query/
+    `-- query_images/
 ```
 
 ---
 
-## 🔍 Supported Search Modes
-
-### 🖼 Image Search
-- **Text → Image** (CLIP / M-CLIP embeddings)
-- **Image → Image similarity**
-- Confidence score based on similarity distribution (UI explainability only)
-
-### 📄 PDF Search
-- **Text → PDF page retrieval**
-- **PDF → PDF similarity** (document-level semantic similarity)
-- Semantic similarity between text embeddings
-- Explainability via **most similar paragraph per page**
-- Confidence score for UI explainability only
-
-### 🎧 Audio Search
-- **Text → Audio** (via transcript keyword search)
-- **Emotion → Audio** (emotion-only search)
-- Emotion detection using **Emotion Model v5**
-- No audio embeddings used
-- Emotion probabilities available for explainability
-
----
-
-## 🧠 Explainability Layer
-
-Each modality provides:
-- **Computational Summary** (counts / scale)
-- **Top-K numerical table**
-- **Confidence score** (does NOT affect ranking)
-- **Explainable evidence**
-  - Images: similarity strength + confidence label
-  - PDFs: most similar paragraph within page
-  - Audio: detected emotion + probabilities
-
-Explainability **never affects ranking**, only UI transparency.
-
----
-
-## 🗄️ Database (SQLite)
+## Database Schema
 
 Database file:
 - `content_search_ai.db`
 
-Tables (current):
-- `images` (image metadata + embeddings)
-- `pdf_pages` (pdf page text + embeddings)
-- `audio_files` (audio metadata, transcript text, emotion + emotion probabilities)
+Main tables currently used by the application:
+- `images`: image metadata and embeddings
+- `pdf_pages`: PDF page text and embeddings
+- `audio_embeddings`: audio transcript embeddings
+- `audio_emotions`: detected emotion labels and emotion probabilities
+- `search_logs`: stored search history
+- `watchdog_status`: indexing/watchdog state tracking
 
-> Note: Table names are important — the system assumes the above schema.
+Note: the README now reflects the current implementation used by the codebase.
 
 ---
 
-## ⚙️ Installation
+## Installation
 
-### Conda (recommended)
+### Conda environment
+
 ```bash
 conda env create -f environment.yml
 conda activate content-search-ai
 ```
 
-### pip (alternative)
+### pip environment
+
 ```bash
 pip install -r requirements.txt
 ```
 
+### Model files
+
+The repository does not store the full model assets inside Git because of their size.
+
+During the first run, the application checks the `models/` folder and downloads the required model files from external storage only if they are missing.
+
+If the model files are already present locally, they are reused and no download is performed.
+
 ---
 
-## ▶️ Running the System
+## Main Dependencies
+
+Key libraries used in the project:
+- PyTorch
+- Sentence Transformers
+- OpenAI CLIP
+- Faster-Whisper
+- PyMuPDF
+- Streamlit
+- Watchdog
+- SQLite
+
+---
+
+## Running the Application
 
 ```bash
 python main.py
 ```
 
 Then open:
-👉 http://localhost:8501
+
+`http://localhost:8501`
+
+What happens on startup:
+1. required model files are checked and downloaded if missing
+2. initial indexing runs for images, PDFs, and audio
+3. watchdog services start for real-time updates
+4. the Streamlit interface is launched
 
 ---
 
-## 📊 Current Dataset Composition
+## Data Folders
 
-- **Images**: your custom images (target ~100 images)
-- **PDFs**: Academic and technical documents
-- **Audio**: WAV files with transcripts & emotion labels
+The application expects archive data in:
+- `data/images`
+- `data/pdfs`
+- `data/audio`
+
+Runtime query uploads are stored in:
+- `data/query`
+- `data/query_images`
 
 ---
 
-## 🚧 Future Extensions (Planned)
+## Explainability Layer
 
-- Video search (frame-based + transcript)
-- FAISS-based large-scale indexing
+Each modality provides additional result context:
+- computational summary
+- top-k result tables
+- confidence indicators
+- evidence snippets or labels
+
+Examples:
+- images: similarity strength and confidence
+- PDFs: best-matching paragraph per page
+- audio: detected emotion and emotion probabilities
+
+Explainability is designed for transparency only and does not alter the retrieval ranking.
+
+---
+
+## Current Scope
+
+The current thesis implementation focuses on:
+- small-to-medium archive indexing
+- local execution
+- multimodal retrieval across three media types
+- explainable result presentation
+- real-time monitoring of archive changes
+
+---
+
+## Limitations
+
+Current practical limitations include:
+- startup depends on local environment configuration
+- model distribution currently relies on external Google Drive hosting because large model assets are not stored in the repository
+- retrieval thresholds are heuristic and can be improved through evaluation
+- large-scale indexing optimization is not yet the main focus
+
+These are good candidates for future thesis improvements.
+
+---
+
+## Future Work
+
+Planned or possible next steps:
+- video retrieval support
 - OCR for scanned PDFs
-- Advanced multimodal fusion (late fusion layer)
+- larger-scale vector indexing with FAISS
+- stronger evaluation metrics for retrieval quality
+- improved architecture modularization
+- richer explainability and result visualization
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Nikolaos Psaltakis**  
 University of West Attica  
@@ -158,6 +297,6 @@ Department of Computer Science
 
 ---
 
-## 📜 License
+## License
 
 Academic use only.
