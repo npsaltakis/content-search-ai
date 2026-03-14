@@ -1,17 +1,23 @@
-import time
-import streamlit as st
-import base64
-from pathlib import Path
-from core import ImageSearcher, PDFSearcher, Model, AudioSearcher
-import psutil
-from core.db.database_helper import DatabaseHelper
 import os
 import sqlite3
+import time
+from pathlib import Path
+
 import pandas as pd
+import streamlit as st
+from core import AudioSearcher, ImageSearcher, PDFSearcher
+from core.db.database_helper import DatabaseHelper
 from core.explainability import (
     estimate_computational_summary,
     summary_to_lines,
     build_results_table,
+)
+from ui import (
+    ABOUT_PROJECT_MARKDOWN,
+    VERSION_HISTORY_MARKDOWN,
+    apply_global_styles,
+    render_app_header,
+    render_dashboard,
 )
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -51,199 +57,12 @@ st.set_page_config(
     layout="wide"
 )
 
-# ======================================================
-# 🎨 CUSTOM CSS STYLING
-# ======================================================
-st.markdown("""
-<style>
-/* DASHBOARD GRID & CARDS */
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-}
-
-.dash-card {
-    background: #141414;
-    border-radius: 18px;
-    border: 1px solid #2a2a2a;
-    padding: 18px 20px;
-    box-shadow: 0 0 25px rgba(0,0,0,0.4);
-    min-height: 120px;
-}
-
-.dash-card h3 {
-    margin: 0 0 8px 0;
-    font-size: 1.1rem;
-}
-
-.dash-card p {
-    margin: 0;
-    font-size: 0.9rem;
-    color: #999;
-}
-
-[data-testid="stExpander"] {
-    background-color: #141414;
-    padding: 0;
-    border-radius: 16px;
-    border: 1px solid #2a2a2a;
-    margin-bottom: 5px !important;
-    box-shadow: 0 0 25px rgba(0,0,0,0.5), inset 0 0 12px rgba(255,255,255,0.03);
-}
-
-[data-testid="stExpander"] > details {
-    border-radius: 16px !important;
-}
-
-[data-testid="stExpanderDetails"] {
-    padding: 20px;
-}
-
-.section-title h2 {
-    margin-bottom: 0;
-}
-.section-title p {
-    margin-top: -5px;
-    color: #aaa;
-}
-
-/* CARD */
-.search-card {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 25px;
-    background: #141414;
-    border-radius: 18px;
-    border: 1px solid #2a2a2a;
-    box-shadow: 0 0 35px rgba(0,0,0,0.45);
-}
-
-/* GRID */
-.result-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
-    margin-top: 25px;
-}
-
-/* IMAGE CARD */
-.result-card {
-    position: relative;
-    background-color: #1b1b1b;
-    border-radius: 16px;
-    overflow: hidden;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.result-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 0 25px rgba(255,255,255,0.18);
-}
-
-.result-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* BADGE */
-.badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: rgba(0,0,0,0.8);
-    padding: 5px 10px;
-    font-size: 0.85rem;
-    border-radius: 8px;
-    color: #ffd700;
-    font-weight: bold;
-}
-
-/* OVERLAY */
-.overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 8px;
-    background: linear-gradient(180deg, transparent, rgba(0,0,0,0.9));
-    text-align: center;
-    color: #ddd;
-    font-size: 0.9rem;
-}
-
-/* ANIMATION */
-.fade-in {
-    animation: fadeIn 0.4s ease forwards;
-}
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* 🟣 STYLE ONLY THE REAL INPUT FIELD */
-div[data-testid="stTextInput"] input {
-    background: #1c1c1c !important;
-    border: 1px solid #2d2d2d !important;
-    border-radius: 12px !important;
-    padding: 12px 14px !important;
-    color: #e6e6e6 !important;
-    font-size: 1.05rem !important;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.35) !important;
-}
-
-/* Prevent ugly wrapper from turning into dark box */
-div[data-testid="stTextInput"] > div {
-    background: transparent !important;
-    padding: 0 !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-/* Label styling */
-div[data-testid="stTextInput"] label {
-    font-size: 0.95rem !important;
-    color: #ffb86c !important;
-    margin-bottom: 6px !important;
-    background: none !important;
-}
-
-.dash-card {
-    margin-bottom: 18px;
-}
-</style>
-""", unsafe_allow_html=True)
+apply_global_styles()
 
 # ======================================================
 # 🚀 INITIALIZATION
 # ======================================================
-# Path του logo
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-logo_path = os.path.join(BASE_DIR, "assets", "images", "logo.png")
-
-# Μετατροπή εικόνας σε base64 για inline εμφάνιση
-if os.path.exists(logo_path):
-    with open(logo_path, "rb") as f:
-        logo_base64 = base64.b64encode(f.read()).decode("utf-8")
-else:
-    st.warning(f"⚠️ Logo not found at {logo_path}")
-
-# Εμφάνιση inline logo + text
-st.markdown(f"""
-<div style="display:flex;align-items:center;gap:25px;margin-top:-10px;margin-bottom:20px;">
-    <img src="data:image/png;base64,{logo_base64}" width="100" style="border-radius:10px;"/>
-    <div>
-        <h1 style="margin-bottom:0;">Content Search AI</h1>
-        <p style="margin-top:4px;color:#9aa0a6;font-size:1.1rem;">
-            Search Content in Multimedia Digital Archives using AI
-        </p>
-        <p style="margin-top:-8px;color:#9aa0a6;font-size:0.9rem;">Version 1.8</p>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+render_app_header(BASE_DIR)
 
 DATA_DIR = "./data"
 
@@ -268,88 +87,7 @@ tabs = st.tabs([
 # 📊 DASHBOARD
 # ======================================================
 with tabs[0]:
-    st.subheader("📊 System Dashboard")
-
-    if st.button("🔄 Refresh Now"):
-        st.rerun()
-
-    cpu_percent = psutil.cpu_percent(interval=0.3)
-    ram_percent = psutil.virtual_memory().percent
-
-    images_wd = get_watchdog(db, "images")
-    pdfs_wd   = get_watchdog(db, "pdfs")
-    audio_wd  = get_watchdog(db, "audio")
-
-    def status_badge(status):
-        return {
-            "Running": "🟡 Running",
-            "Idle": "🟢 Idle",
-            "Error": "🔴 Error",
-        }.get(status, "⚪ Unknown")
-
-    # ===============================
-    # ROW 1 — SYSTEM + INDEX
-    # ===============================
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.markdown("""
-        <div class="dash-card">
-            <h3>🧠 System Overview</h3>
-            <p><strong>CPU Usage:</strong> {:.1f}%</p>
-            <p><strong>RAM Usage:</strong> {:.1f}%</p>
-        </div>
-        """.format(cpu_percent, ram_percent), unsafe_allow_html=True)
-
-    with col2:
-        st.markdown(f"""
-        <div class="dash-card">
-            <h3>📊 Indexed Content</h3>
-            <p>🖼 Images: <strong>{db.count_images()}</strong></p>
-            <p>📄 PDF Pages: <strong>{db.count_pdf_pages()}</strong></p>
-            <p>🎧 Audio Files: <strong>{db.count_audio()}</strong></p>
-        </div>
-        """, unsafe_allow_html=True)
-
-    # ===============================
-    # ROW 2 — IMAGES + PDFS
-    # ===============================
-    col3, col4 = st.columns(2)
-
-    with col3:
-        st.markdown(f"""
-        <div class="dash-card">
-            <h3>🖼 Images Watchdog</h3>
-            <p>Status: <strong>{status_badge(images_wd["status"])}</strong></p>
-            <p>Last event: {images_wd["last_event"]}</p>
-            <p>Processed files: {images_wd["processed"]}</p>
-            {f"<p style='color:#ff6b6b'>Error: {images_wd['error']}</p>" if images_wd["error"] else ""}
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col4:
-        st.markdown(f"""
-        <div class="dash-card">
-            <h3>📄 PDFs Watchdog</h3>
-            <p>Status: <strong>{status_badge(pdfs_wd["status"])}</strong></p>
-            <p>Last event: {pdfs_wd["last_event"]}</p>
-            <p>Processed pages: {pdfs_wd["processed"]}</p>
-            {f"<p style='color:#ff6b6b'>Error: {pdfs_wd['error']}</p>" if pdfs_wd["error"] else ""}
-        </div>
-        """, unsafe_allow_html=True)
-
-    # ===============================
-    # ROW 3 — AUDIO (FULL WIDTH)
-    # ===============================
-    st.markdown(f"""
-    <div class="dash-card">
-        <h3>🎧 Audio Watchdog</h3>
-        <p>Status: <strong>{status_badge(audio_wd["status"])}</strong></p>
-        <p>Last event: {audio_wd["last_event"]}</p>
-        <p>Processed files: {audio_wd["processed"]}</p>
-        {f"<p style='color:#ff6b6b'>Error: {audio_wd['error']}</p>" if audio_wd["error"] else ""}
-    </div>
-    """, unsafe_allow_html=True)
+    render_dashboard(db, get_watchdog)
 
 # ======================================================
 # ℹ️ APPLICATION INFORMATION TAB
@@ -362,188 +100,14 @@ with tabs[1]:
     # ======================================================
     with st.container():
         with st.expander("🧠 About This Project", expanded=True):
-            st.markdown("""
-        This system is a **unified multimodal semantic retrieval platform** capable of searching across  
-        **Images, PDFs, Audio, and Text**, all within a **single shared embedding space**.
-        
-        The platform is designed with **research-grade architectural principles**, focusing on:
-        - **Pure embedding-based retrieval**
-        - **Strict separation between retrieval and explainability**
-        - **Multilingual support without translation models**
-        - **Database-first indexing and querying**
-        - **No heuristic rules, boosts, or hard constraints**
-        
-        It supports the following retrieval modes:
-        - **Text → Image**
-        - **Image → Image**
-        - **Text → PDF**
-        - **PDF → PDF**
-        - **Text → Audio (via transcripts)**
-        - **Emotion-based Audio Filtering**
-        
-        As of **v1.8**, the retrieval core is considered **final, stable, and locked**.
-        
-        ---
-        ### 🧩 Technologies Used
-        - **Python 3.11**
-        - **Streamlit**
-        - **SQLite3 (Unified Multimodal DB)**
-        - **PyTorch**
-        - **Sentence-Transformers**
-        - **CLIP / M-CLIP (ViT-B/32)**
-        - **OpenAI Whisper & Faster-Whisper**
-        - **Emotion Model V5**
-        - **PyMuPDF**
-        - **Watchdog (real-time indexing)**
-        
-        ---
-        ### ⚙️ Model Architecture Overview
-        - **M-CLIP (ViT-B/32)**  
-          → Unified multilingual embedding space for text, images, PDFs, and audio transcripts
-        
-        - **CLIP Image Encoder**  
-          → Image → Image similarity using pure visual embeddings
-        
-        - **Whisper-small / Faster-Whisper**  
-          → Audio transcription (indexing only)
-        
-        - **Emotion Model V5**  
-          → 6-class emotion classification (angry, disgust, fearful, happy, neutral, sad)
-        
-        - **PDF Page Encoder**  
-          → Per-page semantic embeddings with paragraph-level explainability
-        
-        All retrieval operations rely **exclusively on cosine similarity** between normalized embeddings.
-                    """)
+            st.markdown(ABOUT_PROJECT_MARKDOWN)
 
             # ======================================================
             # 📘 VERSION HISTORY
             # ======================================================
     with st.container():
         with st.expander("📘 Version History", expanded=False):
-            st.markdown("""
-            ## 🟢 **v1.8 — Retrieval Core Stabilization & Explainability Lock**  
-            **(December 2025)**
-            
-            This release finalizes the **semantic retrieval architecture** and ensures full correctness,
-            consistency, and explainability across all supported modalities.
-            
-            ### 🔥 Key Improvements (This Session)
-            
-            #### 🧠 Retrieval Core Finalization
-            - Confirmed **pure cosine similarity retrieval** across:
-              - Images
-              - PDFs
-              - Audio
-            - No usage of:
-              - keywords
-              - filename rules
-              - domain heuristics
-              - task-specific boosts
-            - Adaptive similarity thresholding unified across all modalities.
-            - Retrieval logic is **modality-agnostic and symmetric**.
-            
-            ---
-            
-            #### 📄 PDF Search — Explainability Completion
-            - Retrieval unit finalized as **PDF page embeddings**.
-            - Ranking based solely on **page-level semantic similarity**.
-            - Added **paragraph-level explainability**:
-              - The most semantically similar paragraph is identified per page.
-              - Paragraph selection does **not affect ranking**.
-            - Confidence score:
-              - Derived from similarity distribution
-              - Used **only for UI explainability**
-              - Never affects ranking or filtering
-            
-            ---
-            
-            #### 🎧 Audio Search — DB-First Architecture
-            - Fully migrated audio retrieval to **SQLite-only runtime**.
-            - Audio embeddings loaded exclusively from:
-              - `audio_embeddings`
-              - `audio_emotions`
-            - Whisper used **only during indexing**, never during search.
-            - Emotion metadata:
-              - Stored as probabilities
-              - Used optionally for filtering and explainability
-            - Safe and deterministic model loading (no meta tensors).
-            
-            ---
-            
-            #### 🎭 Emotion Model V5 — Locked Integration
-            - Emotion inference finalized as **pure post-processing**.
-            - No interaction with semantic similarity.
-            - 6 fixed emotion classes.
-            - Emotion probabilities exposed for **explainability only**.
-            
-            ---
-            
-            #### 🧩 Architectural Principles Enforced
-            - Strict separation between:
-              - Retrieval core
-              - Explainability layer
-              - UI rendering
-            - Unified retrieval pipeline for all modalities:
-              1. Encode
-              2. Compare
-              3. Rank
-              4. Explain (non-intrusive)
-            
-            This version marks the point where the system is considered:
-            - **Architecturally complete**
-            - **Retrieval-correct**
-            - **Explainable without bias**
-            - **Ready for academic documentation**
-            
-            No further changes are planned for the retrieval core.
-            
-            ---
-            ## 🟢 **v1.7 — Full Multimodal SQLite Integration & Real-Time Indexing**  
-            **(November 2025)**
-            
-            - Unified SQLite database for all modalities:
-              - `images`
-              - `pdf_pages`
-              - `audio_embeddings`
-              - `audio_emotions`
-            - Removed all local embedding and transcript caches.
-            - Introduced Watchdog-based real-time indexing.
-            - Automatic DB updates on file create/delete.
-            - Full path normalization.
-            - Major codebase cleanup.
-            
-            ---
-            ## 🟢 **v1.6 — Audio Search Integration**
-            - Whisper transcription
-            - M-CLIP audio semantic search
-            - Emotion Model V5
-            - Audio visualization
-            
-            ---
-            ## 🟢 **v1.5 — Stable PDF Search**
-            - Page-level PDF processing
-            - Document similarity
-            - UI improvements
-            
-            ---
-            ## 🟠 **v1.4 — Core Integration**
-            - Modular UI
-            - Cache system
-            - Layout refactor
-            
-            ---
-            ## 🟡 **v1.3 — M-CLIP Adoption**
-            - Multilingual unified embeddings
-            
-            ---
-            ## 🔵 **v1.2 — Visual Search Prototype**
-            - Text → Image
-            - Image → Image
-            
-            ---
-            ## ⚫ **v1.0 — Project Initialization**
-        """)
+            st.markdown(VERSION_HISTORY_MARKDOWN)
 
 # ======================================================
 # ⚙️ SETTINGS TAB WITH ACCORDIONS

@@ -15,6 +15,11 @@ This file records proposed improvements for the thesis project so they can be us
 - The issue is not the requirement for an environment itself, but the environment-specific startup method.
 - A more portable startup approach would improve reproducibility and make the project easier to run on other machines.
 
+Status:
+- Completed
+- `main.py` now launches Streamlit through the active Python environment using `python -m streamlit run app.py`
+- automatic browser opening was preserved with an explicit local URL open step
+
 Possible improvements:
 - launch Streamlit through `python -m streamlit run app.py`
 - use the active environment instead of a hardcoded absolute executable path
@@ -30,6 +35,10 @@ Expected benefit:
 - This creates dependency on internet access, download quotas, and link availability.
 - This is a practical distribution limitation, not necessarily a flaw in the retrieval logic itself.
 - For the current thesis/demo version, this is an acceptable trade-off because the model files are too large to keep inside the repository.
+
+Status:
+- Partially addressed through documentation
+- README now explains that model assets are kept outside Git and are downloaded only when missing locally
 
 Possible improvements:
 - document this behavior clearly in the README and setup steps
@@ -56,6 +65,16 @@ Possible improvements:
   - search views
   - shared UI helpers
   - service orchestration
+
+Status:
+- In progress
+- First refactor step completed by extracting shared UI code into the new `ui/` package
+- The following were moved out of `app.py`:
+  - global styles
+  - application header/logo rendering
+  - dashboard rendering
+  - large static informational content blocks
+- Search tabs still remain inside `app.py` and can be extracted gradually in future steps
 
 ### 2.2 Improve architectural documentation
 - The repository would benefit from a clearer architecture description.
