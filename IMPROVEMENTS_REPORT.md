@@ -67,14 +67,20 @@ Possible improvements:
   - service orchestration
 
 Status:
-- In progress
-- First refactor step completed by extracting shared UI code into the new `ui/` package
+- Largely completed
+- Shared UI code was extracted into the new `ui/` package
 - The following were moved out of `app.py`:
   - global styles
   - application header/logo rendering
   - dashboard rendering
   - large static informational content blocks
-- Search tabs still remain inside `app.py` and can be extracted gradually in future steps
+  - text-to-image tab
+  - image-to-image tab
+  - text-to-pdf tab
+  - pdf-to-pdf tab
+  - audio tab
+- `app.py` now acts mainly as a lightweight Streamlit entry shell and tab orchestrator
+- A follow-up cleanup pass removed obsolete imports and dead code from `app.py`
 
 ### 2.2 Improve architectural documentation
 - The repository would benefit from a clearer architecture description.

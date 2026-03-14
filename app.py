@@ -1,17 +1,8 @@
-import os
-import sqlite3
-import time
 from pathlib import Path
 
-import pandas as pd
 import streamlit as st
-from core import AudioSearcher, ImageSearcher, PDFSearcher
+from core import AudioSearcher, ImageSearcher
 from core.db.database_helper import DatabaseHelper
-from core.explainability import (
-    estimate_computational_summary,
-    summary_to_lines,
-    build_results_table,
-)
 from ui import (
     ABOUT_PROJECT_MARKDOWN,
     VERSION_HISTORY_MARKDOWN,
@@ -68,12 +59,6 @@ apply_global_styles()
 # 🚀 INITIALIZATION
 # ======================================================
 render_app_header(BASE_DIR)
-
-DATA_DIR = "./data"
-
-# searcher = ImageSearcher()
-# audio = AudioSearcher()
-# pdf = PDFSearcher()
 # ======================================================
 # 🧭 TABS SETUP
 # ======================================================
