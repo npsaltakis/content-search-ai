@@ -8,10 +8,21 @@ This file records proposed improvements for the thesis project so they can be us
 
 ## 1. Critical Improvements
 
-### 1.1 Portability of application startup
-- The application startup in `main.py` uses a hardcoded Streamlit path.
-- This can break execution on different operating systems or Python environments.
-- It should be replaced with a more portable startup approach.
+### 1.1 Improve startup portability and reproducibility
+- The project correctly depends on a prepared Python/Conda environment, which is expected for an AI application.
+- However, the application startup in `main.py` uses a hardcoded Streamlit executable path.
+- This can fail on different operating systems, different Conda locations, different environment names, or different user setups.
+- The issue is not the requirement for an environment itself, but the environment-specific startup method.
+- A more portable startup approach would improve reproducibility and make the project easier to run on other machines.
+
+Possible improvements:
+- launch Streamlit through `python -m streamlit run app.py`
+- use the active environment instead of a hardcoded absolute executable path
+
+Expected benefit:
+- the application startup becomes more portable
+- the project becomes easier to run on different machines and operating systems
+- the launcher becomes less dependent on one specific local setup
 
 ### 1.2 Runtime dependency on external model downloads
 - The project downloads models from Google Drive at runtime through `core/model.py`.
