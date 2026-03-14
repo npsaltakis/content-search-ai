@@ -15,6 +15,11 @@ This file records proposed improvements for the thesis project so they can be us
 - The issue is not the requirement for an environment itself, but the environment-specific startup method.
 - A more portable startup approach would improve reproducibility and make the project easier to run on other machines.
 
+Status:
+- Completed
+- `main.py` now launches Streamlit through the active Python environment using `python -m streamlit run app.py`
+- automatic browser opening was preserved with an explicit local URL open step
+
 Possible improvements:
 - launch Streamlit through `python -m streamlit run app.py`
 - use the active environment instead of a hardcoded absolute executable path
@@ -30,6 +35,10 @@ Expected benefit:
 - This creates dependency on internet access, download quotas, and link availability.
 - This is a practical distribution limitation, not necessarily a flaw in the retrieval logic itself.
 - For the current thesis/demo version, this is an acceptable trade-off because the model files are too large to keep inside the repository.
+
+Status:
+- Partially addressed through documentation
+- README now explains that model assets are kept outside Git and are downloaded only when missing locally
 
 Possible improvements:
 - document this behavior clearly in the README and setup steps
@@ -57,6 +66,22 @@ Possible improvements:
   - shared UI helpers
   - service orchestration
 
+Status:
+- Largely completed
+- Shared UI code was extracted into the new `ui/` package
+- The following were moved out of `app.py`:
+  - global styles
+  - application header/logo rendering
+  - dashboard rendering
+  - large static informational content blocks
+  - text-to-image tab
+  - image-to-image tab
+  - text-to-pdf tab
+  - pdf-to-pdf tab
+  - audio tab
+- `app.py` now acts mainly as a lightweight Streamlit entry shell and tab orchestrator
+- A follow-up cleanup pass removed obsolete imports and dead code from `app.py`
+
 ### 2.2 Improve architectural documentation
 - The repository would benefit from a clearer architecture description.
 - Useful additions:
@@ -69,6 +94,13 @@ Possible improvements:
 - The SQLite schema is created directly from code in `core/db/database_helper.py`.
 - This works for the current version, but schema evolution will become harder later.
 - A migration/versioning strategy would make maintenance safer.
+
+Status:
+- Partially completed
+- A lightweight schema versioning layer was added to `core/db/database_helper.py`
+- The system now tracks database schema state through a `schema_meta` table
+- Existing databases are safely recognized as schema version `1` without destructive changes
+- A simple migration path structure now exists for future schema upgrades
 
 ### 2.4 Reduce repeated heavy model loading
 - Separate watchdog services load heavy models independently.

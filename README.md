@@ -206,6 +206,14 @@ Key libraries used in the project:
 
 ---
 
+## Architecture Documentation
+
+For a more detailed explanation of the system design, startup flow, indexing pipeline, database structure, retrieval logic, and explainability layer, see:
+
+- `docs/ARCHITECTURE.md`
+
+---
+
 ## Running the Application
 
 ```bash

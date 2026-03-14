@@ -5,6 +5,7 @@ from typing import Optional, Dict, Any
 
 # Default DB path
 DB_PATH = Path(__file__).resolve().parents[2] / "content_search_ai.db"
+CURRENT_SCHEMA_VERSION = 1
 
 
 class DatabaseHelper:
@@ -27,10 +28,29 @@ class DatabaseHelper:
     #          INITIALISE DATABASE
     # =========================================
     def initialise_database(self):
-        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+        db_dir = os.path.dirname(self.db_path)
+        if db_dir:
+            os.makedirs(db_dir, exist_ok=True)
 
         conn = self._get_conn()
         cur = conn.cursor()
+
+        self._ensure_schema_meta_table(cur)
+        current_version = self._get_schema_version(cur)
+
+        # Existing databases created before schema versioning did not have
+        # a schema_meta table. In that case we safely treat the current
+        # schema as version 1 without altering user data.
+        if current_version == 0:
+            self._create_base_schema(cur)
+            self._set_schema_version(cur, CURRENT_SCHEMA_VERSION)
+        else:
+            self._apply_migrations(cur, current_version)
+
+        conn.commit()
+        conn.close()
+
+    def _create_base_schema(self, cur: sqlite3.Cursor):
 
         # IMAGES
         cur.execute("""
@@ -105,8 +125,48 @@ class DatabaseHelper:
                 VALUES (?, 'Idle', NULL, strftime('%s','now'), 0, NULL)
             """, (name,))
 
-        conn.commit()
-        conn.close()
+    def _ensure_schema_meta_table(self, cur: sqlite3.Cursor):
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS schema_meta (
+                key TEXT PRIMARY KEY,
+                value TEXT NOT NULL
+            );
+        """)
+
+    def _get_schema_version(self, cur: sqlite3.Cursor) -> int:
+        cur.execute(
+            "SELECT value FROM schema_meta WHERE key = 'schema_version'"
+        )
+        row = cur.fetchone()
+        if not row:
+            return 0
+
+        try:
+            return int(row["value"])
+        except (TypeError, ValueError):
+            return 0
+
+    def _set_schema_version(self, cur: sqlite3.Cursor, version: int):
+        cur.execute("""
+            INSERT INTO schema_meta (key, value)
+            VALUES ('schema_version', ?)
+            ON CONFLICT(key) DO UPDATE SET value = excluded.value
+        """, (str(version),))
+
+    def _apply_migrations(self, cur: sqlite3.Cursor, current_version: int):
+        while current_version < CURRENT_SCHEMA_VERSION:
+            next_version = current_version + 1
+            migration = getattr(self, f"_migrate_to_v{next_version}", None)
+            if migration is None:
+                raise RuntimeError(f"Missing migration for schema version {next_version}")
+
+            migration(cur)
+            self._set_schema_version(cur, next_version)
+            current_version = next_version
+
+    def _migrate_to_v1(self, cur: sqlite3.Cursor):
+        # Version 1 matches the current baseline schema.
+        self._create_base_schema(cur)
 
     # =========================================
     #               COUNTS
