@@ -24,10 +24,18 @@ Expected benefit:
 - the project becomes easier to run on different machines and operating systems
 - the launcher becomes less dependent on one specific local setup
 
-### 1.2 Runtime dependency on external model downloads
-- The project downloads models from Google Drive at runtime through `core/model.py`.
+### 1.2 External model hosting as a deployment limitation
+- The project depends on large model assets that are not stored inside the Git repository.
+- The required models are currently downloaded from Google Drive through `core/model.py` when they are missing locally.
 - This creates dependency on internet access, download quotas, and link availability.
-- A more stable and reproducible setup process would improve reliability.
+- This is a practical distribution limitation, not necessarily a flaw in the retrieval logic itself.
+- For the current thesis/demo version, this is an acceptable trade-off because the model files are too large to keep inside the repository.
+
+Possible improvements:
+- document this behavior clearly in the README and setup steps
+- improve user-facing messages when a model download fails
+- keep the current "download only if missing" behavior explicit in the documentation
+- consider alternative hosting/distribution options in future versions
 
 ### 1.3 Missing automated tests
 - There is currently no visible automated test layer for:

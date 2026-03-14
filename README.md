@@ -182,6 +182,14 @@ conda activate content-search-ai
 pip install -r requirements.txt
 ```
 
+### Model files
+
+The repository does not store the full model assets inside Git because of their size.
+
+During the first run, the application checks the `models/` folder and downloads the required model files from external storage only if they are missing.
+
+If the model files are already present locally, they are reused and no download is performed.
+
 ---
 
 ## Main Dependencies
@@ -261,7 +269,7 @@ The current thesis implementation focuses on:
 
 Current practical limitations include:
 - startup depends on local environment configuration
-- model download currently relies on Google Drive availability
+- model distribution currently relies on external Google Drive hosting because large model assets are not stored in the repository
 - retrieval thresholds are heuristic and can be improved through evaluation
 - large-scale indexing optimization is not yet the main focus
 
