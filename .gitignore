@@ -6,3 +6,8 @@ models/
 *.db
 __pycache__/
 *.pyc
+docs/THEORY_MODELS_QA_EL.md
+docs/THESIS_QA.md
+docs/THESIS_QA_EL.md
+docs/DEFENSE_PREP_EL.md
+docs/ORAL_EVALUATION_NOTES_EL.md

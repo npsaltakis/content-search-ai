@@ -1,0 +1,5 @@
+alpha,avg_result_count,total_relevant_hits_in_top5,queries_with_relevant_doc_in_top5,notes
+0.0,746.1,8,4,Highest result volume with no top-5 gain over stricter thresholds in the sampled PDF queries
+0.2,632.2,8,4,Reduced result volume while keeping the same top-5 relevance profile in the sampled PDF queries
+0.3,569.6,8,4,Current default; moderate filtering with the same top-5 relevance profile as the tested alternatives
+0.5,440.8,8,4,Strongest filtering among tested variants; no top-5 gain over alpha 0.3 in the sampled PDF queries

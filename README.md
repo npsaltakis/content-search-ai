@@ -206,11 +206,20 @@ Key libraries used in the project:
 
 ---
 
-## Architecture Documentation
+## Documentation Guide
 
-For a more detailed explanation of the system design, startup flow, indexing pipeline, database structure, retrieval logic, and explainability layer, see:
+Key project documentation:
 
-- `docs/ARCHITECTURE.md`
+- `docs/ARCHITECTURE.md`: system design, indexing flow, retrieval flow, and explainability
+- `docs/RUNBOOK.md`: setup, startup, demo checklist, and troubleshooting
+- `docs/EVALUATIONS_FULL_EL.md`: complete Greek-language evaluation analysis for thesis and oral defense
+- `evaluation/README.md`: practical evaluation workspace guide
+- `evaluation/EVALUATION_STATUS.md`: modality-by-modality evaluation status
+- `docs/DEFENSE_PREP_EL.md`: practical Greek-language defense preparation notes
+- `docs/THESIS_QA_EL.md`: likely thesis questions and answers in Greek
+- `docs/THEORY_MODELS_QA_EL.md`: theory-focused model questions in Greek
+- `docs/THESIS_QA_EL.md`: likely thesis questions and answers in Greek
+- `docs/THEORY_MODELS_QA_EL.md`: theory-focused model questions in Greek
 
 ---
 

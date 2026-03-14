@@ -1,0 +1,101 @@
+query_id,query_text,alpha,rank,filename,score,relevance_proxy
+img_eval_001,football player,0.0,1,Lionel_Messi.jpg,0.261687,not_relevant
+img_eval_001,football player,0.0,2,gettyimages-2219558287-612x612.jpg,0.258922,not_relevant
+img_eval_001,football player,0.0,3,000_Par1269498-2048x1443.jpg,0.251031,relevant
+img_eval_001,football player,0.0,4,984092829.jpg,0.240771,not_relevant
+img_eval_001,football player,0.0,5,989851184.jpg,0.240580,not_relevant
+img_eval_001,football player,0.2,1,Lionel_Messi.jpg,0.261687,not_relevant
+img_eval_001,football player,0.2,2,gettyimages-2219558287-612x612.jpg,0.258922,not_relevant
+img_eval_001,football player,0.2,3,000_Par1269498-2048x1443.jpg,0.251031,relevant
+img_eval_001,football player,0.2,4,984092829.jpg,0.240771,not_relevant
+img_eval_001,football player,0.2,5,989851184.jpg,0.240580,not_relevant
+img_eval_001,football player,0.3,1,Lionel_Messi.jpg,0.261687,not_relevant
+img_eval_001,football player,0.3,2,gettyimages-2219558287-612x612.jpg,0.258922,not_relevant
+img_eval_001,football player,0.3,3,000_Par1269498-2048x1443.jpg,0.251031,relevant
+img_eval_001,football player,0.3,4,984092829.jpg,0.240771,not_relevant
+img_eval_001,football player,0.3,5,989851184.jpg,0.240580,not_relevant
+img_eval_001,football player,0.5,1,Lionel_Messi.jpg,0.261687,not_relevant
+img_eval_001,football player,0.5,2,gettyimages-2219558287-612x612.jpg,0.258922,not_relevant
+img_eval_001,football player,0.5,3,000_Par1269498-2048x1443.jpg,0.251031,relevant
+img_eval_001,football player,0.5,4,984092829.jpg,0.240771,not_relevant
+img_eval_001,football player,0.5,5,989851184.jpg,0.240580,not_relevant
+img_eval_002,portrait man,0.0,1,98756125.jpg,0.270049,not_relevant
+img_eval_002,portrait man,0.0,2,89779839.jpg,0.269365,not_relevant
+img_eval_002,portrait man,0.0,3,407869068_10161463377388069_270481176185833064_n2.jpg,0.266338,relevant
+img_eval_002,portrait man,0.0,4,997338199.jpg,0.263127,not_relevant
+img_eval_002,portrait man,0.0,5,98438433.jpg,0.262620,not_relevant
+img_eval_002,portrait man,0.2,1,98756125.jpg,0.270049,not_relevant
+img_eval_002,portrait man,0.2,2,89779839.jpg,0.269365,not_relevant
+img_eval_002,portrait man,0.2,3,407869068_10161463377388069_270481176185833064_n2.jpg,0.266338,relevant
+img_eval_002,portrait man,0.2,4,997338199.jpg,0.263127,not_relevant
+img_eval_002,portrait man,0.2,5,98438433.jpg,0.262620,not_relevant
+img_eval_002,portrait man,0.3,1,98756125.jpg,0.270049,not_relevant
+img_eval_002,portrait man,0.3,2,89779839.jpg,0.269365,not_relevant
+img_eval_002,portrait man,0.3,3,407869068_10161463377388069_270481176185833064_n2.jpg,0.266338,relevant
+img_eval_002,portrait man,0.3,4,997338199.jpg,0.263127,not_relevant
+img_eval_002,portrait man,0.3,5,98438433.jpg,0.262620,not_relevant
+img_eval_002,portrait man,0.5,1,98756125.jpg,0.270049,not_relevant
+img_eval_002,portrait man,0.5,2,89779839.jpg,0.269365,not_relevant
+img_eval_002,portrait man,0.5,3,407869068_10161463377388069_270481176185833064_n2.jpg,0.266338,relevant
+img_eval_002,portrait man,0.5,4,997338199.jpg,0.263127,not_relevant
+img_eval_002,portrait man,0.5,5,98438433.jpg,0.262620,not_relevant
+img_eval_003,boat,0.0,1,967719295.jpg,0.273676,not_relevant
+img_eval_003,boat,0.0,2,89332423.jpg,0.273537,relevant
+img_eval_003,boat,0.0,3,998845445.jpg,0.270668,not_relevant
+img_eval_003,boat,0.0,4,973827791.jpg,0.252996,not_relevant
+img_eval_003,boat,0.0,5,89353191.jpg,0.252546,not_relevant
+img_eval_003,boat,0.2,1,967719295.jpg,0.273676,not_relevant
+img_eval_003,boat,0.2,2,89332423.jpg,0.273537,relevant
+img_eval_003,boat,0.2,3,998845445.jpg,0.270668,not_relevant
+img_eval_003,boat,0.2,4,973827791.jpg,0.252996,not_relevant
+img_eval_003,boat,0.2,5,89353191.jpg,0.252546,not_relevant
+img_eval_003,boat,0.3,1,967719295.jpg,0.273676,not_relevant
+img_eval_003,boat,0.3,2,89332423.jpg,0.273537,relevant
+img_eval_003,boat,0.3,3,998845445.jpg,0.270668,not_relevant
+img_eval_003,boat,0.3,4,973827791.jpg,0.252996,not_relevant
+img_eval_003,boat,0.3,5,89353191.jpg,0.252546,not_relevant
+img_eval_003,boat,0.5,1,967719295.jpg,0.273676,not_relevant
+img_eval_003,boat,0.5,2,89332423.jpg,0.273537,relevant
+img_eval_003,boat,0.5,3,998845445.jpg,0.270668,not_relevant
+img_eval_003,boat,0.5,4,973827791.jpg,0.252996,not_relevant
+img_eval_003,boat,0.5,5,89353191.jpg,0.252546,not_relevant
+img_eval_004,firefighters,0.0,1,89404014.jpg,0.285806,relevant
+img_eval_004,firefighters,0.0,2,97731718.jpg,0.263139,not_relevant
+img_eval_004,firefighters,0.0,3,970958470.jpg,0.249743,not_relevant
+img_eval_004,firefighters,0.0,4,89353191.jpg,0.245970,not_relevant
+img_eval_004,firefighters,0.0,5,98377566.jpg,0.245698,not_relevant
+img_eval_004,firefighters,0.2,1,89404014.jpg,0.285806,relevant
+img_eval_004,firefighters,0.2,2,97731718.jpg,0.263139,not_relevant
+img_eval_004,firefighters,0.2,3,970958470.jpg,0.249743,not_relevant
+img_eval_004,firefighters,0.2,4,89353191.jpg,0.245970,not_relevant
+img_eval_004,firefighters,0.2,5,98377566.jpg,0.245698,not_relevant
+img_eval_004,firefighters,0.3,1,89404014.jpg,0.285806,relevant
+img_eval_004,firefighters,0.3,2,97731718.jpg,0.263139,not_relevant
+img_eval_004,firefighters,0.3,3,970958470.jpg,0.249743,not_relevant
+img_eval_004,firefighters,0.3,4,89353191.jpg,0.245970,not_relevant
+img_eval_004,firefighters,0.3,5,98377566.jpg,0.245698,not_relevant
+img_eval_004,firefighters,0.5,1,89404014.jpg,0.285806,relevant
+img_eval_004,firefighters,0.5,2,97731718.jpg,0.263139,not_relevant
+img_eval_004,firefighters,0.5,3,970958470.jpg,0.249743,not_relevant
+img_eval_004,firefighters,0.5,4,89353191.jpg,0.245970,not_relevant
+img_eval_004,firefighters,0.5,5,98377566.jpg,0.245698,not_relevant
+img_eval_005,band orchestra,0.0,1,89407459.jpg,0.319965,relevant
+img_eval_005,band orchestra,0.0,2,98773047.jpg,0.262943,not_relevant
+img_eval_005,band orchestra,0.0,3,97825959.jpg,0.254193,not_relevant
+img_eval_005,band orchestra,0.0,4,980090465.jpg,0.251622,not_relevant
+img_eval_005,band orchestra,0.0,5,960092.jpg,0.248159,not_relevant
+img_eval_005,band orchestra,0.2,1,89407459.jpg,0.319965,relevant
+img_eval_005,band orchestra,0.2,2,98773047.jpg,0.262943,not_relevant
+img_eval_005,band orchestra,0.2,3,97825959.jpg,0.254193,not_relevant
+img_eval_005,band orchestra,0.2,4,980090465.jpg,0.251622,not_relevant
+img_eval_005,band orchestra,0.2,5,960092.jpg,0.248159,not_relevant
+img_eval_005,band orchestra,0.3,1,89407459.jpg,0.319965,relevant
+img_eval_005,band orchestra,0.3,2,98773047.jpg,0.262943,not_relevant
+img_eval_005,band orchestra,0.3,3,97825959.jpg,0.254193,not_relevant
+img_eval_005,band orchestra,0.3,4,980090465.jpg,0.251622,not_relevant
+img_eval_005,band orchestra,0.3,5,960092.jpg,0.248159,not_relevant
+img_eval_005,band orchestra,0.5,1,89407459.jpg,0.319965,relevant
+img_eval_005,band orchestra,0.5,2,98773047.jpg,0.262943,not_relevant
+img_eval_005,band orchestra,0.5,3,97825959.jpg,0.254193,not_relevant
+img_eval_005,band orchestra,0.5,4,980090465.jpg,0.251622,not_relevant
+img_eval_005,band orchestra,0.5,5,960092.jpg,0.248159,not_relevant

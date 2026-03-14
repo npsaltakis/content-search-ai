@@ -1,0 +1,30 @@
+query_id,modality,query_type,query_text,query_asset,notes
+img_t_001,image,text,person,,Replace with a visually confirmed image concept from the archive
+img_t_002,image,text,car,,Replace with a visually confirmed image concept from the archive
+img_t_003,image,text,building,,Replace with a visually confirmed image concept from the archive
+img_t_004,image,text,dog,,Replace with a visually confirmed image concept from the archive
+img_t_005,image,text,nature,,Replace with a visually confirmed image concept from the archive
+img_t_006,image,text,portrait,,Good candidate if the archive contains face or selfie photos
+img_t_007,image,text,beach,,Use only if this concept is present in the archive
+img_i_001,image,image,,data/query_images/example_image_1.jpg,Provide a local query image for image-to-image evaluation
+img_i_002,image,image,,data/query_images/example_image_2.jpg,Provide a local query image for image-to-image evaluation
+img_i_003,image,image,,data/query_images/example_image_3.jpg,Provide a local query image for image-to-image evaluation
+pdf_t_001,pdf,text,decision trees,,Expected to match 10_AIML_Intro_and_Decision_Trees.pdf if indexed
+pdf_t_002,pdf,text,genetic algorithms,,Expected to match 11_AIML_GeneticAlgorithms.pdf if indexed
+pdf_t_003,pdf,text,neural networks,,Expected to match 12_AIML_ANNs_and_Associative_Memories.pdf or related material
+pdf_t_004,pdf,text,logistic regression,,Expected to match 13_AIML_Linear_and_Logistic_Regressors.pdf if indexed
+pdf_t_005,pdf,text,minmax pruning,,Expected to match 07 Παραδείγματα minmax και a-b pruning.pdf if indexed
+pdf_t_006,pdf,text,ευριστική αναζήτηση,,Expected to match 04 Ευριστική αναζήτηση.pdf if indexed
+pdf_t_007,pdf,text,τοπική αναζήτηση,,Expected to match 05 Τοπική αναζήτηση.pdf if indexed
+pdf_t_008,pdf,text,αναζήτηση με αντιπαλότητα,,Expected to match 07 Αναζήτηση με αντιπαλότητα.pdf if indexed
+pdf_t_009,pdf,text,προβλήματα ικανοποίησης περιορισμών,,Expected to match 06 Προβλήματα ικανοποίησης περιορισμών.pdf if indexed
+pdf_t_010,pdf,text,τυφλή αναζήτηση,,Expected to match 03 Τυφλή αναζήτηση.pdf if indexed
+pdf_p_001,pdf,pdf,,data/query/example_pdf_1.pdf,Provide a local query PDF for pdf-to-pdf evaluation
+pdf_p_002,pdf,pdf,,data/query/example_pdf_2.pdf,Provide a local query PDF for pdf-to-pdf evaluation
+aud_t_001,audio,text,χαρούμενη ομιλία,,Use only if you know the indexed transcript content supports this semantic query
+aud_t_002,audio,text,λυπημένη ομιλία,,Use only if you know the indexed transcript content supports this semantic query
+aud_t_003,audio,text,ουδέτερη ομιλία,,Use only if you know the indexed transcript content supports this semantic query
+aud_t_004,audio,text,παράδειγμα ελληνικής αυθόρμητης ομιλίας,,Useful if the indexed set contains speech samples of that type
+aud_e_001,audio,emotion,happy,,Emotion-only query
+aud_e_002,audio,emotion,sad,,Emotion-only query
+aud_e_003,audio,emotion,neutral,,Emotion-only query

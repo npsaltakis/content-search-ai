@@ -107,6 +107,20 @@ Status:
 - This increases CPU/RAM usage and may reduce scalability.
 - Future optimization could reduce duplicated loading costs.
 
+Status:
+- Assessed, not aggressively optimized yet
+- Current duplication mainly comes from process isolation between:
+  - initial sync
+  - watchdog services
+  - runtime searchers
+- This is a real performance trade-off, but also a predictable consequence of the current process-based architecture
+- For the current thesis/demo scale, this is acceptable and safer than introducing a more complex shared model-serving architecture
+
+Safe future directions:
+- keep lazy loading inside each runtime context
+- avoid unnecessary re-instantiation within the same process
+- document the trade-off clearly rather than over-engineering cross-process model sharing too early
+
 ---
 
 ## 3. Search Quality and Research Improvements
@@ -114,6 +128,15 @@ Status:
 ### 3.1 Validate retrieval thresholds experimentally
 - Several retrieval modules use heuristic adaptive thresholds such as `mean + 0.3 * std`.
 - This is practical, but should ideally be supported by experiments and evaluation.
+
+Status:
+- First-pass experimental validation completed
+- A dedicated evaluation plan was added in `docs/EVALUATION_PLAN.md`
+- A practical evaluation workspace was added under `evaluation/`
+- A lightweight metrics script was added to support manual judgment analysis
+- A first threshold-sensitivity experiment was completed for the Text -> PDF pipeline
+- Results were documented in `docs/EVALUATION_RESULTS.md`
+- Broader multimodal validation is still a future extension, but the current heuristic now has an initial documented experimental basis
 
 ### 3.2 Add evaluation metrics
 - The thesis would be much stronger with measurable retrieval evaluation.
