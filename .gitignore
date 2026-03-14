@@ -4,3 +4,5 @@ models/
 *.safetensors
 *.pth
 *.db
+__pycache__/
+*.pyc
