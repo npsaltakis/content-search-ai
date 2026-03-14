@@ -126,3 +126,80 @@ The project now has:
 - a first completed threshold-sensitivity experiment on the PDF retrieval pipeline
 
 This is enough to treat **3.1 as completed for a first thesis-ready validation pass**, with the clear note that broader multimodal evaluation remains a future extension.
+
+
+---
+
+## Second Pass: Text -> Image Threshold Validation
+
+A second first-pass threshold-sensitivity evaluation was executed on the **Text -> Image** retrieval pipeline.
+
+Reason for choosing this modality next:
+- the image archive is large enough to support a small manual inspection pass
+- a few visually clear concepts were available in the indexed set
+- this allows an initial multimodal extension of the threshold analysis without changing retrieval code
+
+Supporting files for this pass:
+- `evaluation/image_threshold_summary.csv`
+- `evaluation/image_threshold_top5.csv`
+- `evaluation/image_eval_sheets/`
+
+### Query Set Used
+
+The image pass used 5 visually grounded text queries:
+- `football player`
+- `portrait man`
+- `boat`
+- `firefighters`
+- `band orchestra`
+
+### Relevance Proxy Used
+
+This pass used a conservative visual-target proxy:
+- for each query, one clearly relevant image or one small relevant filename set was identified in advance
+- top-5 outputs were then checked against this proxy and visually inspected through contact sheets
+
+Important limitation:
+- unlike the PDF pass, image relevance cannot be judged reliably from filenames alone
+- this image pass should therefore be treated as a small qualitative threshold-sensitivity study, not a full benchmark
+
+### Summary Results
+
+| Alpha | Threshold formula | Avg returned images per query | Relevant hits in top-5 | Queries with at least 1 relevant top-5 result |
+|---|---|---:|---:|---:|
+| 0.0 | `mean` | 69.4 | 5 | 5 |
+| 0.2 | `mean + 0.2 * std` | 60.2 | 5 | 5 |
+| 0.3 | `mean + 0.3 * std` | 53.0 | 5 | 5 |
+| 0.5 | `mean + 0.5 * std` | 43.6 | 5 | 5 |
+
+### Main Findings
+
+1. As in the PDF pass, stricter thresholds reduced the accepted result-set size substantially.
+2. In this sampled image experiment, the tested threshold variants did not change the observed top-5 relevance proxy.
+3. The current default `mean + 0.3 * std` again behaved like a reasonable middle ground: it filtered more weak results than looser variants while preserving the same top-5 proxy score in this sample.
+4. Visual inspection showed that some broad text queries still introduce semantic drift inside the top-5, especially for categories such as `portrait man` or `firefighters`.
+
+### Interpretation
+
+For this first Text -> Image pass, `mean + 0.3 * std` remains a defensible practical default because it:
+- reduces the number of returned images compared with looser settings
+- preserves the same observed top-5 proxy result in the sampled queries
+- avoids moving to a stricter threshold without evidence of improved top-5 behavior
+
+At the same time, the image pass makes one limitation clearer than the PDF pass:
+- threshold tuning alone is not enough to solve semantic ambiguity in broad visual queries
+
+### Honest Limitations of This Image Pass
+
+- only 5 manually selected text queries were used
+- relevance judgments were based on small visual target sets rather than full annotation of all top results
+- the image archive contains many personal or event-style photos, making broad-category labeling noisier than in the PDF archive
+- this pass validates threshold behavior more than full semantic retrieval quality
+
+### Practical Conclusion
+
+The project now has first-pass threshold validation evidence for:
+- **Text -> PDF**
+- **Text -> Image**
+
+This strengthens the thesis by showing that the current adaptive threshold has now been checked on more than one modality, even though broader multimodal evaluation is still future work.

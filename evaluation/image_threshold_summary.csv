@@ -1,0 +1,21 @@
+query_id,query_text,alpha,threshold_formula,returned_results,relevant_top5,has_relevant_top5,mean_similarity,std_similarity
+img_eval_001,football player,0.0,mean + 0.0 * std,69,1,1,0.205334,0.018532
+img_eval_001,football player,0.2,mean + 0.2 * std,63,1,1,0.205334,0.018532
+img_eval_001,football player,0.3,mean + 0.3 * std,56,1,1,0.205334,0.018532
+img_eval_001,football player,0.5,mean + 0.5 * std,44,1,1,0.205334,0.018532
+img_eval_002,portrait man,0.0,mean + 0.0 * std,70,1,1,0.230426,0.017515
+img_eval_002,portrait man,0.2,mean + 0.2 * std,61,1,1,0.230426,0.017515
+img_eval_002,portrait man,0.3,mean + 0.3 * std,58,1,1,0.230426,0.017515
+img_eval_002,portrait man,0.5,mean + 0.5 * std,51,1,1,0.230426,0.017515
+img_eval_003,boat,0.0,mean + 0.0 * std,67,1,1,0.213395,0.016797
+img_eval_003,boat,0.2,mean + 0.2 * std,56,1,1,0.213395,0.016797
+img_eval_003,boat,0.3,mean + 0.3 * std,50,1,1,0.213395,0.016797
+img_eval_003,boat,0.5,mean + 0.5 * std,43,1,1,0.213395,0.016797
+img_eval_004,firefighters,0.0,mean + 0.0 * std,77,1,1,0.207672,0.019836
+img_eval_004,firefighters,0.2,mean + 0.2 * std,65,1,1,0.207672,0.019836
+img_eval_004,firefighters,0.3,mean + 0.3 * std,54,1,1,0.207672,0.019836
+img_eval_004,firefighters,0.5,mean + 0.5 * std,41,1,1,0.207672,0.019836
+img_eval_005,band orchestra,0.0,mean + 0.0 * std,64,1,1,0.206417,0.022298
+img_eval_005,band orchestra,0.2,mean + 0.2 * std,56,1,1,0.206417,0.022298
+img_eval_005,band orchestra,0.3,mean + 0.3 * std,47,1,1,0.206417,0.022298
+img_eval_005,band orchestra,0.5,mean + 0.5 * std,39,1,1,0.206417,0.022298

@@ -14,17 +14,20 @@ Supporting files:
 - `evaluation/pdf_threshold_summary.csv`
 - `evaluation/pdf_threshold_top5.csv`
 
-This is currently the strongest thesis-ready evaluation artifact in the repository.
+### Text -> Image
+A small first-pass threshold-sensitivity evaluation has now also been completed for the Text -> Image retrieval pipeline.
+
+Supporting files:
+- `docs/EVALUATION_RESULTS.md`
+- `evaluation/image_threshold_summary.csv`
+- `evaluation/image_threshold_top5.csv`
+- `evaluation/image_eval_sheets/`
+
+The PDF pass remains the strongest quantitative artifact, while the image pass adds a useful multimodal extension through qualitative visual inspection.
 
 ---
 
 ## Partially Prepared
-
-### Text -> Image
-This modality has a starter query list and can be evaluated manually, but it still needs explicit visual relevance judgments.
-
-Main limitation:
-- many image filenames are not self-descriptive, so reliable evaluation needs manual visual inspection rather than filename-based proxies
 
 ### Image -> Image
 This modality is also ready for manual evaluation, but it requires selecting a few representative local query images and judging near-duplicate or semantic similarity behavior by hand.
@@ -40,12 +43,12 @@ Main limitations:
 
 ## Recommended Next Evaluation Steps
 
-1. Complete a small manual Text -> Image judgment set.
-2. Complete a small Image -> Image judgment set with 3-5 representative queries.
-3. Add a small audio judgment set focused on:
+1. Extend the image evaluation from Text -> Image to Image -> Image with 3-5 representative query images.
+2. Add a small audio judgment set focused on:
    - one or two semantic transcript queries
    - emotion-filter queries
-4. Re-run the metrics script on the filled judgment CSVs.
+3. Re-run the metrics script on the filled judgment CSVs.
+4. Expand both PDF and image evaluation with larger manual judgment sets if more thesis time is available.
 
 ---
 
@@ -53,6 +56,7 @@ Main limitations:
 
 The current project now has:
 - one completed first-pass threshold experiment for PDFs
+- one completed small first-pass threshold experiment for Text -> Image
 - a reusable multimodal evaluation workspace
 - starter query sets for images, PDFs, and audio
 - a metrics script for manual judgments
