@@ -95,6 +95,13 @@ Status:
 - This works for the current version, but schema evolution will become harder later.
 - A migration/versioning strategy would make maintenance safer.
 
+Status:
+- Partially completed
+- A lightweight schema versioning layer was added to `core/db/database_helper.py`
+- The system now tracks database schema state through a `schema_meta` table
+- Existing databases are safely recognized as schema version `1` without destructive changes
+- A simple migration path structure now exists for future schema upgrades
+
 ### 2.4 Reduce repeated heavy model loading
 - Separate watchdog services load heavy models independently.
 - This increases CPU/RAM usage and may reduce scalability.
