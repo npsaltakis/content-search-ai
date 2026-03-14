@@ -37,6 +37,9 @@ These correspond to alpha values:
 - `0.3`
 - `0.5`
 
+For consistency, this first-pass experiment evaluated the top `K=5` results for each query.
+The system itself supports configurable `top_k`; `K=5` was used here only as the evaluation cutoff for comparison.
+
 ---
 
 ## Query Set Used
@@ -72,7 +75,7 @@ See also:
 - `evaluation/pdf_threshold_summary.csv`
 - `evaluation/pdf_threshold_top5.csv`
 
-Summary table:
+Summary table for evaluation cutoff `K=5`:
 
 | Alpha | Threshold formula | Avg returned pages per query | Relevant hits in top-5 | Queries with at least 1 relevant top-5 result |
 |---|---|---:|---:|---:|
@@ -86,7 +89,7 @@ Summary table:
 ## Main Findings
 
 1. The threshold variants changed the **size of the accepted result set** substantially.
-2. In this sampled PDF experiment, the threshold variants did **not improve the top-5 relevance profile**.
+2. In this sampled PDF experiment, using evaluation cutoff `K=5`, the threshold variants did **not improve the top-5 relevance profile**.
 3. Increasing the threshold from `0.0` to `0.5` reduced average returned pages per query from `746.1` to `440.8`.
 4. The current default `mean + 0.3 * std` reduced result-set size compared with looser settings, while keeping the same observed top-5 relevance profile as the tested alternatives.
 
@@ -96,7 +99,7 @@ Summary table:
 
 For this first-pass PDF evaluation, `mean + 0.3 * std` appears to be a reasonable practical default because it:
 - filters more aggressively than `mean` and `mean + 0.2 * std`
-- does not reduce the observed top-5 relevance compared with the tested alternatives in this sample
+- does not reduce the observed top-5 relevance at evaluation cutoff `K=5` compared with the tested alternatives in this sample
 - avoids the need for a stricter threshold without evidence of top-5 improvement
 
 This does **not** prove that `0.3` is globally optimal.
@@ -110,7 +113,7 @@ It does support the claim that the current heuristic is a defensible baseline fo
 - only the Text -> PDF modality was experimentally checked in this pass
 - relevance was judged with a filename/topic proxy rather than full page-level annotation
 - image and audio threshold validation still require broader manual judgment sets
-- top-5 relevance remained largely stable across tested thresholds, so threshold tuning alone is not enough to solve deeper semantic mismatches for some queries
+- relevance at evaluation cutoff `K=5` remained largely stable across tested thresholds, so threshold tuning alone is not enough to solve deeper semantic mismatches for some queries
 
 ---
 
