@@ -1,3 +1,4 @@
+from .audio_tab import render_audio_tab
 from .content import ABOUT_PROJECT_MARKDOWN, VERSION_HISTORY_MARKDOWN
 from .dashboard import render_dashboard
 from .header import render_app_header
