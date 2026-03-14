@@ -19,6 +19,7 @@ from ui import (
     render_app_header,
     render_dashboard,
     render_image_to_image_tab,
+    render_pdf_to_pdf_tab,
     render_text_to_image_tab,
     render_text_to_pdf_tab,
 )
@@ -148,129 +149,7 @@ with tabs[5]:
 # 📚 PDF → PDF SEARCH
 # ======================================================
 with tabs[6]:
-    st.subheader("📚 PDF-to-PDF Similarity Search")
-
-    uploaded_pdf = st.file_uploader(
-        "📤 Upload a PDF to compare",
-        type=["pdf"]
-    )
-
-    base_folder = "./data/pdfs"
-    query_folder = "./data/query"
-
-    os.makedirs(base_folder, exist_ok=True)
-    os.makedirs(query_folder, exist_ok=True)
-
-    if uploaded_pdf is not None:
-        # ----------------------------------
-        # Save uploaded PDF
-        # ----------------------------------
-        query_path = os.path.join(query_folder, uploaded_pdf.name)
-        with open(query_path, "wb") as f:
-            f.write(uploaded_pdf.getbuffer())
-
-        st.success(f"✅ Uploaded: {uploaded_pdf.name}")
-        st.info("🔍 Analyzing document similarity...")
-
-        php_to_pdf_searcher = PDFSearcher(db_path="content_search_ai.db")
-
-        with st.spinner("Processing and comparing PDFs..."):
-            results = php_to_pdf_searcher.search_similar_pdfs(
-                query_pdf_path=query_path,
-                top_k=top_k
-            )
-
-        if not results:
-            st.warning("❌ No strong matches found.")
-        else:
-            st.success(f"✅ Found {len(results)} similar documents")
-
-            # ======================================================
-            # 🧠 COMPUTATIONAL SUMMARY (EXPLAINABILITY)
-            # ======================================================
-            indexed_items = len(results)
-
-            summary = estimate_computational_summary(
-                query=f"PDF: {uploaded_pdf.name}",
-                results=results,
-                indexed_items=indexed_items,
-                embedding_dim=512,
-                compared_items=indexed_items,
-                top_k=top_k
-            )
-
-            with st.expander("🧠 Computational Summary (Explainability)", expanded=False):
-                st.text("\n".join(summary_to_lines(summary)))
-
-                st.text("\nCosine similarity formula used:\n")
-                st.code(
-                    "sim(q_pdf, d_i) = (v_q · v_i) / (||v_q|| · ||v_i||)\n"
-                    "v_q = PDFEncoder(query_document)\n"
-                    "v_i = PDFEncoder(document_i)",
-                    language="text"
-                )
-
-            # ======================================================
-            # 📊 NUMERICAL RESULTS TABLE (TOP-K)
-            # ======================================================
-            with st.expander("📊 Numerical Results (Top-K)", expanded=False):
-                table_rows = []
-                for i, r in enumerate(results, start=1):
-                    table_rows.append({
-                        "Rank": i,
-                        "PDF": os.path.basename(r["pdf"]),
-                        "Page": r["page"],
-                        "Similarity (%)": round(r["score"] * 100, 2),
-                        "Confidence (%)": round(r["confidence"] * 100, 1),
-                    })
-
-                df = pd.DataFrame(table_rows)
-                st.dataframe(df, use_container_width=True, hide_index=True)
-
-            # ======================================================
-            # 📄 DETAILED RESULTS (WITH PARAGRAPH EXPLAINABILITY)
-            # ======================================================
-            for r in results:
-                filename = os.path.basename(r["pdf"])
-
-                color = (
-                    "🟢" if r["score"] >= 0.98
-                    else "🟠" if r["score"] >= 0.95
-                    else "🔴"
-                )
-
-                st.markdown(
-                    f"""
-                    ### {color} {filename} — Page {r['page']}
-                    **Similarity:** `{r['score'] * 100:.2f}%`  
-                    **Confidence:** `{r['confidence'] * 100:.1f}%`  
-                    **Reason:** document-level semantic embedding similarity
-                    """
-                )
-
-                if os.path.basename(r["pdf"]) == uploaded_pdf.name:
-                    st.caption("ℹ️ Self-match: the query PDF exists in the archive.")
-
-                # -------- PARAGRAPH-LEVEL EXPLAINABILITY --------
-                if r.get("matched_paragraph"):
-                    st.markdown("**Most semantically similar paragraph:**")
-                    st.info(r["matched_paragraph"])
-                else:
-                    st.caption("No paragraph-level match available.")
-                # ------------------------------------------------
-
-                with open(r["pdf"], "rb") as f:
-                    pdf_data = f.read()
-
-                st.download_button(
-                    label=f"⬇️ Download {filename}",
-                    data=pdf_data,
-                    file_name=filename,
-                    mime="application/pdf",
-                    key=f"download_{filename}_{r['page']}"
-                )
-
-                st.markdown("---")
+    render_pdf_to_pdf_tab(top_k)
 
 # ======================================================
 # 🎧 AUDIO SEARCH
