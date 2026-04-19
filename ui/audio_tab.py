@@ -127,8 +127,9 @@ def render_audio_tab(get_audio_searcher, top_k):
 
                 if full_path:
                     try:
+                        audio_format = "audio/mpeg" if full_path.lower().endswith(".mp3") else "audio/wav"
                         with open(full_path, "rb") as file_obj:
-                            st.audio(file_obj.read(), format="audio/wav")
+                            st.audio(file_obj.read(), format=audio_format)
                         st.caption(full_path)
                     except Exception as exc:
                         st.error(f"Could not load audio: {exc}")
