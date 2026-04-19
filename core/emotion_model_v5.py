@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import numpy as np
 import librosa
-import soundfile as sf
 import whisper
 
 # Canonical emotion classes
@@ -17,7 +16,9 @@ class AudioEmotionModel(nn.Module):
         super().__init__()
 
         # Whisper encoder — ΠΑΝΤΑ CPU (σταθερό & ασφαλές)
+        print("[AUDIO] Loading Whisper encoder for emotion model...", flush=True)
         self.whisper_model = whisper.load_model("small", device="cpu")
+        print("[AUDIO] Whisper encoder loaded.", flush=True)
 
         # Projection head
         self.proj = nn.Sequential(
@@ -51,26 +52,25 @@ class EmotionModelV5:
         self.device = "cpu"
 
         # Load checkpoint
-        ckpt = torch.load(ckpt_path, map_location="cpu")
+        try:
+            ckpt = torch.load(ckpt_path, map_location="cpu", weights_only=True)
+        except TypeError:
+            ckpt = torch.load(ckpt_path, map_location="cpu")
 
         # Build model
+        print("[AUDIO] Building emotion model...", flush=True)
         self.model = AudioEmotionModel()
         self.model.load_state_dict(ckpt["model_state_dict"])
         self.model.to(self.device)
         self.model.eval()
+        print("[AUDIO] Emotion model ready.", flush=True)
 
     @torch.no_grad()
     def predict(self, audio_path: str):
         # ----------------------------------------
         # 1️⃣ Load audio
         # ----------------------------------------
-        audio, sr = sf.read(audio_path)
-
-        if audio.ndim > 1:
-            audio = audio.mean(axis=1)
-
-        if sr != 16000:
-            audio = librosa.resample(audio, orig_sr=sr, target_sr=16000)
+        audio, _ = librosa.load(audio_path, sr=16000, mono=True)
 
         # ----------------------------------------
         # 2️⃣ Whisper preprocessing

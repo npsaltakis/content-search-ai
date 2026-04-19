@@ -18,9 +18,9 @@ def normalize_emotion_query(q: str) -> str:
     q = q.lower().strip()
     mapping = {
         "happy": "happy", "joy": "happy", "χαρά": "happy",
-        "sad": "sad", "λυπημένος": "sad",
+        "sad": "sad", "λυπημένος": "sad", "λύπη": "sad",
         "angry": "angry", "θυμός": "angry",
-        "fear": "fearful", "φόβος": "fearful",
+        "fear": "fearful", "fearful": "fearful", "φόβος": "fearful",
         "disgust": "disgust", "αηδία": "disgust",
         "neutral": "neutral", "ουδέτερος": "neutral",
     }
