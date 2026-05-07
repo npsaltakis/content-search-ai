@@ -71,7 +71,7 @@ class ImageSearcher:
         self.db_path = db_path
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        self.image_model, self.preprocess = clip.load("ViT-B/32", device=self.device)
+        self.image_model, self.preprocess = clip.load("ViT-B/32", device=self.device, jit=False)
 
         self.text_model = SentenceTransformer(
             "./models/mclip_finetuned_coco_ready",

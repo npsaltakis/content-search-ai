@@ -1,4 +1,5 @@
 name: content-search-ai
+
 channels:
   - pytorch
   - conda-forge
@@ -6,8 +7,13 @@ channels:
 
 dependencies:
   - python=3.11
+
+  # Core
   - pip
-  - numpy
+  - setuptools<81
+  - wheel
+
+  - numpy=1.26.4
   - pandas
   - matplotlib
   - tqdm
@@ -18,7 +24,7 @@ dependencies:
   - watchdog
   - sqlite
 
-  # PyTorch CPU only
+  # PyTorch CPU
   - pytorch=2.4.1
   - torchvision=0.19.1
   - torchaudio=2.4.1
@@ -32,19 +38,20 @@ dependencies:
   - jupyterlab
 
   - pip:
+      - numpy<2
       - soundfile
       - pymupdf
       - openai-whisper
       - faster-whisper>=1.0.3
-      - sentence-transformers>=3.0.0
-      - transformers>=4.45.0
-      - huggingface-hub
+      - sentence-transformers==3.0.1
+      - transformers==4.45.2
+      - huggingface-hub<1.0
       - regex
       - ftfy
+      - clip-anytorch==2.6.0
       - tiktoken
       - gdown
       - python-multipart
-      - opencv-python
+      - opencv-python==4.10.0.84
       - pygame
       - streamlit>=1.38.0
-      - git+https://github.com/openai/CLIP.git@dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1
