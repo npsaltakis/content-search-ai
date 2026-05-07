@@ -171,12 +171,19 @@ Note: the README now reflects the current implementation used by the codebase.
 
 ### Conda environment
 
+The recommended setup path is the Conda environment file. It pins the ML stack used by the project, including PyTorch, Transformers, Sentence Transformers, NumPy, OpenCV, and CLIP compatibility packages.
+
 ```bash
 conda env create -f environment.yml
 conda activate content-search-ai
+python -c "import clip, torch, transformers, sentence_transformers; print('Environment OK')"
 ```
 
+Note: CLIP is installed through `clip-anytorch`, which provides the same `import clip` interface without building the archived OpenAI CLIP GitHub package from source. This avoids recent `setuptools` / `pkg_resources` build failures and keeps installation reproducible from a single `environment.yml` file.
+
 ### pip environment
+
+The Conda setup is preferred. The `requirements.txt` file is kept for reference and lightweight pip-based experimentation, but the full tested environment is defined in `environment.yml`.
 
 ```bash
 pip install -r requirements.txt
@@ -197,7 +204,7 @@ If the model files are already present locally, they are reused and no download 
 Key libraries used in the project:
 - PyTorch
 - Sentence Transformers
-- OpenAI CLIP
+- CLIP via `clip-anytorch`
 - Faster-Whisper
 - PyMuPDF
 - Streamlit
