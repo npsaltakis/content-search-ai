@@ -151,7 +151,7 @@ class PDFSearcher:
 
         sims = np.array([s for _, s in doc_scores])
         mean, std = sims.mean(), sims.std()
-        MIN_SIM = mean + 0.3 * std
+        MIN_SIM = mean + 0.3 * std   # α = 0.3 — thesis-validated default (Slide 14)
 
         top_docs_ranked = sorted(
             [(p, s) for p, s in doc_scores if s >= MIN_SIM],
@@ -188,7 +188,9 @@ class PDFSearcher:
                     best_para = paragraphs[idx]
                     best_para_score = float(para_sims[idx])
 
-                confidence = (doc_sim - mean) / (std + 1e-6)
+                CONF_LOW  = mean + 1.0 * std
+                CONF_HIGH = mean + 4.0 * std
+                confidence = (doc_sim - CONF_LOW) / (CONF_HIGH - CONF_LOW + 1e-6)
                 confidence = float(np.clip(confidence, 0.0, 1.0))
 
                 results.append({
@@ -224,7 +226,10 @@ class PDFSearcher:
         ])
 
         mean, std = sims.mean(), sims.std()
-        MIN_SIM = mean + 0.3 * std  # ✅ adaptive
+        MIN_SIM = mean + 0.3 * std   # α = 0.3 — thesis-validated default (Slide 14)
+
+        CONF_LOW  = mean + 0.3 * std
+        CONF_HIGH = mean + 4.0 * std
 
         results = []
 
@@ -252,7 +257,7 @@ class PDFSearcher:
 
             # ------------------------------------------
 
-            confidence = (sim - MIN_SIM) / (1 - MIN_SIM)
+            confidence = (sim - CONF_LOW) / (CONF_HIGH - CONF_LOW + 1e-6)
             confidence = float(np.clip(confidence, 0.0, 1.0))
 
             results.append({

@@ -122,7 +122,10 @@ class ImageSearcher:
         ])
 
         mean, std = sims.mean(), sims.std()
-        MIN_SIM = mean + 0.3 * std   # adaptive, generic
+        MIN_SIM = mean + 0.3 * std   # α = 0.3 — thesis-validated default (Slide 14)
+
+        CONF_LOW  = mean + 0.3 * std
+        CONF_HIGH = mean + 3.0 * std
 
         # -----------------------------
         # Final ranking
@@ -132,7 +135,7 @@ class ImageSearcher:
             if sim < MIN_SIM:
                 continue
 
-            confidence = (sim - mean) / (std + 1e-6)
+            confidence = (sim - CONF_LOW) / (CONF_HIGH - CONF_LOW + 1e-6)
             confidence = float(np.clip(confidence, 0.0, 1.0))
 
             results.append({
@@ -166,14 +169,17 @@ class ImageSearcher:
         ])
 
         mean, std = sims.mean(), sims.std()
-        MIN_SIM = mean + 0.3 * std  # ίδιο philosophy με Text→Image
+        MIN_SIM = mean + 0.3 * std   # α = 0.3 — thesis-validated default (Slide 14)
+
+        CONF_LOW  = mean + 0.3 * std
+        CONF_HIGH = mean + 3.0 * std
 
         results = []
         for img, sim in zip(images, sims):
             if sim < MIN_SIM:
                 continue
 
-            confidence = (sim - mean) / (std + 1e-6)
+            confidence = (sim - CONF_LOW) / (CONF_HIGH - CONF_LOW + 1e-6)
             confidence = float(np.clip(confidence, 0.0, 1.0))
 
             results.append({
