@@ -85,14 +85,10 @@ def render_archive_tab(db_path: str, base_dir: Path):
         if not images:
             st.info("No images indexed yet.")
         else:
-            cols_per_row = st.select_slider(
-                "Thumbnails per row", options=[2, 3, 4, 5, 6], value=6
-            )
-
-            cols = st.columns(cols_per_row)
+            cols = st.columns(6)
             for idx, (filename, filepath) in enumerate(images):
                 full_path = base_dir / filepath
-                with cols[idx % cols_per_row]:
+                with cols[idx % 6]:
                     if full_path.exists():
                         st.image(
                             str(full_path),
