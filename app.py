@@ -8,6 +8,7 @@ from ui import (
     VERSION_HISTORY_MARKDOWN,
     apply_global_styles,
     render_app_header,
+    render_archive_tab,
     render_audio_tab,
     render_dashboard,
     render_image_to_image_tab,
@@ -70,7 +71,8 @@ tabs = st.tabs([
     "🖼️ Search: Image → Image",
     "💬 Search: Text → PDF",
     "📚 Search: PDF → PDF",
-    "🎧 Search: Text → Audio"
+    "🎧 Search: Text → Audio",
+    "🗂️ Archive Browser",
 ])
 
 # ======================================================
@@ -142,4 +144,10 @@ with tabs[6]:
 # ======================================================
 with tabs[7]:
     render_audio_tab(get_audio_searcher, top_k)
+
+# ======================================================
+# 🗂️ ARCHIVE BROWSER
+# ======================================================
+with tabs[8]:
+    render_archive_tab(str(DB_PATH), BASE_DIR)
 
