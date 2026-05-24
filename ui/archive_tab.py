@@ -86,7 +86,7 @@ def render_archive_tab(db_path: str, base_dir: Path):
             st.info("No images indexed yet.")
         else:
             cols_per_row = st.select_slider(
-                "Thumbnails per row", options=[2, 3, 4, 5, 6], value=4
+                "Thumbnails per row", options=[2, 3, 4, 5, 6], value=6
             )
 
             cols = st.columns(cols_per_row)
