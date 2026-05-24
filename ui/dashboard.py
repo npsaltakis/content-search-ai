@@ -1,5 +1,34 @@
+import sqlite3
+from pathlib import Path
+
 import psutil
 import streamlit as st
+
+_DEFAULT_DB = Path(__file__).resolve().parents[1] / "content_search_ai.db"
+
+MODALITY_ICON = {
+    "Text → Image":   "💬🖼️",
+    "Text → PDF":     "💬📄",
+    "Text → Audio":   "💬🎧",
+    "Audio → Emotion":"🎭🎧",
+}
+
+
+def _load_recent_searches(db_path: str, limit: int = 10):
+    try:
+        conn = sqlite3.connect(db_path)
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT query, modality, searched_at
+            FROM search_logs
+            ORDER BY searched_at DESC
+            LIMIT ?
+        """, (limit,))
+        rows = cur.fetchall()
+        conn.close()
+        return rows
+    except Exception:
+        return []
 
 
 def _status_badge(status):
@@ -10,7 +39,7 @@ def _status_badge(status):
     }.get(status, "⚪ Unknown")
 
 
-def render_dashboard(db, get_watchdog):
+def render_dashboard(db, get_watchdog, db_path: str = str(_DEFAULT_DB)):
     st.subheader("📊 System Dashboard")
 
     if st.button("🔄 Refresh Now"):
@@ -92,3 +121,21 @@ def render_dashboard(db, get_watchdog):
         """,
         unsafe_allow_html=True,
     )
+
+    # ── Recent Search History ─────────────────────────────────────────────────
+    st.divider()
+    st.markdown("### 🕓 Recent Search History")
+
+    recent = _load_recent_searches(db_path)
+
+    if not recent:
+        st.info("No searches yet. Run a query from any search tab.")
+    else:
+        for query, modality, searched_at in recent:
+            icon = MODALITY_ICON.get(modality, "🔍")
+            ts   = searched_at[:16].replace("T", " ") if searched_at else "—"
+            st.markdown(
+                f"{icon} &nbsp; **{query}** &nbsp;&nbsp; "
+                f"<span style='color:gray;font-size:0.85em'>{modality} · {ts}</span>",
+                unsafe_allow_html=True,
+            )

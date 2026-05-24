@@ -21,6 +21,7 @@ def render_text_to_pdf_tab(top_k):
         else:
             st.info(f"🔍 Searching for: '{query_text}' ...")
 
+            from ui.search_logger import log_search
             text_to_pdf_searcher = PDFSearcher(db_path="content_search_ai.db")
 
             with st.spinner("Processing and comparing PDFs..."):
@@ -28,6 +29,7 @@ def render_text_to_pdf_tab(top_k):
                     query_text=query_text,
                     top_k=top_k,
                 )
+            log_search(query_text, "Text → PDF")
 
             if not results:
                 st.warning("❌ No matching PDFs found.")

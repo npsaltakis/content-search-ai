@@ -49,10 +49,13 @@ def render_audio_tab(get_audio_searcher, top_k):
                 q_norm = query.lower().strip()
                 emotion_only = q_norm in emotion_keywords
 
+                from ui.search_logger import log_search
                 if emotion_only:
                     results = audio_searcher.search_by_emotion(query, top_k=top_k) or []
+                    log_search(query, "Audio → Emotion")
                 else:
                     results = audio_searcher.search_semantic(query, top_k=top_k) or []
+                    log_search(query, "Text → Audio")
 
         if not results:
             st.error("❌ No matching audio found.")

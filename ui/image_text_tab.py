@@ -34,8 +34,10 @@ def render_text_to_image_tab(db_path, get_image_searcher, top_k):
         else:
             st.info(f"🔍 Searching for: '{query}' ...")
 
+            from ui.search_logger import log_search
             text_to_image_searcher = get_image_searcher()
             results = text_to_image_searcher.search(query, top_k=top_k)
+            log_search(query, "Text → Image")
 
             if not results:
                 st.warning("❌ No results found.")
