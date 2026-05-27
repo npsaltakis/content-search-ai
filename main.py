@@ -6,7 +6,7 @@ import threading
 import time
 import webbrowser
 from multiprocessing import Process
-from core import Model
+from core import ModelManager
 
 from core.watchdog.watch_images_other import start_watch as start_watch_images
 from core.watchdog.watch_pdfs import start_watch as start_watch_pdfs
@@ -51,8 +51,7 @@ def open_streamlit_tab(url: str, delay: float = 2.0):
 # ============================
 if __name__ == "__main__":
 
-    model = Model()
-    model.download_model();
+    ModelManager().ensure_all()
 
     print("=======================================")
     print("🔄 Running initial filesystem sync...")
