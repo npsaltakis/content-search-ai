@@ -48,7 +48,7 @@ dependencies:
       - huggingface-hub<1.0
       - regex
       - ftfy
-      - clip-anytorch==2.6.0
+      - open_clip_torch>=2.24.0
       - tiktoken
       - gdown
       - python-multipart
