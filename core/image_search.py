@@ -2,6 +2,7 @@ import sqlite3
 import numpy as np
 import torch
 import open_clip
+from open_clip.tokenizer import HFTokenizer
 from PIL import Image
 
 
@@ -42,8 +43,9 @@ class ImageSearcher:
     - ~+19% zero-shot accuracy vs previous ViT-B/32 setup
     """
 
-    MODEL_NAME       = "xlm-roberta-large-ViT-H-14"
-    MODEL_PRETRAINED = "frozen_laion5b_s13b_b90k"
+    MODEL_NAME     = "xlm-roberta-large-ViT-H-14"
+    MODEL_PATH     = "./models/openclip_vit_h14/open_clip_pytorch_model.bin"
+    TOKENIZER_PATH = "./models/openclip_vit_h14/tokenizer"
 
     def __init__(self, db_path="content_search_ai.db"):
         self.db_path = db_path
@@ -52,15 +54,15 @@ class ImageSearcher:
         print(f"[IMAGE] Loading OpenCLIP '{self.MODEL_NAME}' on {self.device}...")
         self.model, _, self.preprocess = open_clip.create_model_and_transforms(
             self.MODEL_NAME,
-            pretrained=self.MODEL_PRETRAINED,
+            pretrained=self.MODEL_PATH,
             device=self.device
         )
         self.model.eval()
-        self.tokenizer = open_clip.get_tokenizer(self.MODEL_NAME)
+        self.tokenizer = HFTokenizer(self.TOKENIZER_PATH, context_length=77)
 
         # Backwards-compat alias used by watchdog & sync_manager
         self.image_model = self.model
-        print("[IMAGE] OpenCLIP ready.")
+        print("[IMAGE] OpenCLIP ready (local).")
 
     # --------------------------------------------------
     def _load_sqlite_embeddings(self):
