@@ -85,15 +85,11 @@ class ModelManager:
     def is_ready(self, model_key: str) -> bool:
         """Return True if all required files exist for this model."""
         entry = MODEL_REGISTRY[model_key]
-        model_dir = self.models_dir / model_key
+        # audio_emotion lives directly under models/, all others in models/<key>/
+        base = self.models_dir if model_key == "audio_emotion" else self.models_dir / model_key
         for rel_file in entry["required_files"]:
-            if not (model_dir / rel_file).exists():
+            if not (base / rel_file).exists():
                 return False
-        # Audio emotion is at models root, not in a subdirectory
-        if model_key == "audio_emotion":
-            for rel_file in entry["required_files"]:
-                if not (self.models_dir / rel_file).exists():
-                    return False
         return True
 
     # --------------------------------------------------
@@ -137,7 +133,6 @@ class ModelManager:
 
     def _download_huggingface(self, model_key: str, dl: dict):
         from huggingface_hub import hf_hub_download
-        from sentence_transformers import SentenceTransformer
 
         dest = self.models_dir / model_key
         dest.mkdir(exist_ok=True)
