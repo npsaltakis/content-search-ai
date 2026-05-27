@@ -4,6 +4,7 @@ import torch
 import open_clip
 from open_clip.tokenizer import HFTokenizer
 from PIL import Image
+from core.model import ModelManager
 
 
 # =========================================================
@@ -50,6 +51,8 @@ class ImageSearcher:
     def __init__(self, db_path="content_search_ai.db"):
         self.db_path = db_path
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
+
+        ModelManager().ensure("openclip_vit_h14")
 
         print(f"[IMAGE] Loading OpenCLIP '{self.MODEL_NAME}' on {self.device}...")
         self.model, _, self.preprocess = open_clip.create_model_and_transforms(
