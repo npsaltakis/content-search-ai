@@ -109,7 +109,7 @@ def sync_pdfs():
 
         searcher = PDFSearcher(
             db_path=str(DB_PATH),
-            model_path=str(BASE_DIR / "models/mclip_finetuned_coco_ready")
+            model_path=str(BASE_DIR / "models/multilingual_e5_large")
         )
 
         for filename in to_insert:
