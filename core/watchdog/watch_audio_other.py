@@ -92,9 +92,10 @@ class AudioOtherHandler(FileSystemEventHandler):
             ckpt_path=str(self.base_dir / "models/best_model_audio_emotion_v5.pt")
         )
 
-        print("🔹 Loading M-CLIP text encoder...")
-        self.mclip = SentenceTransformer(
-            str(self.base_dir / "models/mclip_finetuned_coco_ready")
+        print("🔹 Loading multilingual-e5-large text encoder...")
+        self.text_model = SentenceTransformer(
+            str(self.base_dir / "models/multilingual_e5_large"),
+            device="cpu"
         )
 
         print("✅ AUDIO watchdog ready.\n")
@@ -156,9 +157,9 @@ class AudioOtherHandler(FileSystemEventHandler):
             if not transcript:
                 transcript = "[NO_TRANSCRIPT]"
 
-            # 2️⃣ Text embedding
-            emb = self.mclip.encode(
-                transcript,
+            # 2️⃣ Text embedding  ("passage: " prefix — E5 convention for stored docs)
+            emb = self.text_model.encode(
+                f"passage: {transcript}",
                 normalize_embeddings=True
             ).astype(np.float32)
 

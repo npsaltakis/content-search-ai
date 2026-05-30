@@ -190,9 +190,9 @@ def sync_audio():
         emotion_model = EmotionModelV5(
             ckpt_path=str(BASE_DIR / "models/best_model_audio_emotion_v5.pt")
         )
-        print("[AUDIO] Loading M-CLIP text encoder for audio transcripts...", flush=True)
-        mclip = SentenceTransformer(
-            str(BASE_DIR / "models/mclip_finetuned_coco_ready"),
+        print("[AUDIO] Loading multilingual-e5-large text encoder...", flush=True)
+        text_model = SentenceTransformer(
+            str(BASE_DIR / "models/multilingual_e5_large"),
             device="cpu"
         )
         print("[AUDIO] Audio models ready.", flush=True)
@@ -230,7 +230,7 @@ def sync_audio():
                     f"[AUDIO] ({index}/{total_to_insert}) Embedding transcript...",
                     flush=True
                 )
-                emb = mclip.encode(transcript, normalize_embeddings=True)
+                emb = text_model.encode(f"passage: {transcript}", normalize_embeddings=True)
                 print(
                     f"[AUDIO] ({index}/{total_to_insert}) Predicting emotion...",
                     flush=True
