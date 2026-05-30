@@ -188,7 +188,7 @@ def sync_audio():
 
         print("[AUDIO] Loading emotion model...", flush=True)
         emotion_model = EmotionModelV5(
-            ckpt_path=str(BASE_DIR / "models/best_model_audio_emotion_v5.pt")
+            ckpt_path=str(BASE_DIR / "models/audio_emotion/best_model_audio_emotion_v5.pt")
         )
         print("[AUDIO] Loading multilingual-e5-large text encoder...", flush=True)
         text_model = SentenceTransformer(

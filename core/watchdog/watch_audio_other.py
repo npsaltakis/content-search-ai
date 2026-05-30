@@ -89,7 +89,7 @@ class AudioOtherHandler(FileSystemEventHandler):
 
         print("🔹 Loading EmotionModelV5...")
         self.emotion_model = EmotionModelV5(
-            ckpt_path=str(self.base_dir / "models/best_model_audio_emotion_v5.pt")
+            ckpt_path=str(self.base_dir / "models/audio_emotion/best_model_audio_emotion_v5.pt")
         )
 
         print("🔹 Loading multilingual-e5-large text encoder...")
