@@ -231,21 +231,30 @@ def sync_audio():
                     flush=True
                 )
                 emb = text_model.encode(f"passage: {transcript}", normalize_embeddings=True)
-                print(
-                    f"[AUDIO] ({index}/{total_to_insert}) Predicting emotion...",
-                    flush=True
-                )
-                emotion, probs = emotion_model.predict(str(full_path))
 
+                # Save embedding immediately — independent of emotion prediction
                 db.insert_audio_embedding(
                     rel_path,
                     emb.astype(np.float32).tobytes()
                 )
-                db.insert_audio_emotion(
-                    rel_path,
-                    emotion,
-                    json.dumps(probs)
+
+                # Emotion prediction is optional — skip if it fails
+                print(
+                    f"[AUDIO] ({index}/{total_to_insert}) Predicting emotion...",
+                    flush=True
                 )
+                try:
+                    emotion, probs = emotion_model.predict(str(full_path))
+                    db.insert_audio_emotion(
+                        rel_path,
+                        emotion,
+                        json.dumps(probs)
+                    )
+                except Exception as emo_error:
+                    print(
+                        f"[AUDIO] ({index}/{total_to_insert}) Emotion skipped: {emo_error}",
+                        flush=True
+                    )
 
                 elapsed = time.time() - file_started
                 db.update_watchdog_status(
