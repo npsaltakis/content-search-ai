@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import numpy as np
-import librosa
+import soundfile as sf
 import whisper
 
 # Canonical emotion classes
@@ -70,7 +70,18 @@ class EmotionModelV5:
         # ----------------------------------------
         # 1️⃣ Load audio
         # ----------------------------------------
-        audio, _ = librosa.load(audio_path, sr=16000, mono=True)
+        audio, sr = sf.read(audio_path, dtype='float32', always_2d=False)
+        if audio.ndim > 1:
+            audio = audio.mean(axis=1)  # stereo → mono
+        if sr != 16000:
+            # resample με numpy (linear interpolation) χωρίς librosa
+            import math
+            n_samples = math.ceil(len(audio) * 16000 / sr)
+            audio = np.interp(
+                np.linspace(0, len(audio) - 1, n_samples),
+                np.arange(len(audio)),
+                audio
+            ).astype(np.float32)
 
         # ----------------------------------------
         # 2️⃣ Whisper preprocessing
