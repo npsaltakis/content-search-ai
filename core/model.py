@@ -48,8 +48,9 @@ MODEL_REGISTRY = {
             "type": "huggingface",
             "repo_id": "nickpsal/audio-emotion-v5",
             "files": {
-                "best_model_audio_emotion_v5.pt": "best_model_audio_emotion_v5.pt",
+                "best_model_audio_emotion_v5.zip": "best_model_audio_emotion_v5.zip",
             },
+            "extract_zip": "best_model_audio_emotion_v5.zip",
         },
     },
 }
@@ -103,6 +104,7 @@ class ModelManager:
         print(f"  Saved to {dest}")
 
     def _download_huggingface(self, model_key: str, dl: dict):
+        import zipfile
         from huggingface_hub import hf_hub_download
 
         dest = self.models_dir / model_key
@@ -116,6 +118,16 @@ class ModelManager:
                     filename=remote_name,
                     local_dir=str(dest),
                 )
+
+        # Extract zip if specified
+        if "extract_zip" in dl:
+            zip_path = dest / dl["extract_zip"]
+            if zip_path.exists():
+                print(f"  Extracting {zip_path.name}...")
+                with zipfile.ZipFile(zip_path, "r") as z:
+                    z.extractall(dest)
+                zip_path.unlink()
+                print(f"  Extracted to {dest}")
 
         if "tokenizer_repo" in dl:
             tok_dest = dest / dl["tokenizer_subdir"]
